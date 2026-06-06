@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maîtriser Claude — Parcours de formation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================================
+       DESIGN TOKENS
+    ============================================================ */
+    :root {
+      --cream:        #F7F4EE;
+      --cream-dark:   #EDE8DF;
+      --ink:          #1C1A17;
+      --ink-soft:     #4A4540;
+      --ink-muted:    #8C8480;
+      --gold:         #B8953A;
+      --gold-light:   #D4AE5A;
+      --gold-pale:    #F0E4C4;
+      --terra:        #B85C38;
+      --terra-pale:   #F5E4DC;
+      --sage:         #5A7A5A;
+      --sage-pale:    #DDE8DD;
+      --blue-ink:     #2C4A6E;
+      --blue-pale:    #D8E4F0;
+
+      --radius-sm:    6px;
+      --radius-md:    12px;
+      --radius-lg:    20px;
+      --shadow-card:  0 2px 16px rgba(28,26,23,0.08), 0 1px 4px rgba(28,26,23,0.05);
+      --shadow-hover: 0 8px 32px rgba(28,26,23,0.14), 0 2px 8px rgba(28,26,23,0.08);
+    }
+
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ============================================================
+       BACKGROUND TEXTURE
+    ============================================================ */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(ellipse 80% 50% at 15% 20%, rgba(184,149,58,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 85% 75%, rgba(184,92,56,0.04) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ============================================================
+       LAYOUT
+    ============================================================ */
+    .site-wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* ============================================================
+       HEADER
+    ============================================================ */
+    .site-header {
+      padding: 56px 0 48px;
+      text-align: center;
+      animation: fadeSlideDown 0.7s ease both;
+    }
+
+    .brand-eyebrow {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .site-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(36px, 6vw, 58px);
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 16px;
+    }
+
+    .site-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .site-subtitle {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--ink-soft);
+      max-width: 500px;
+      margin: 0 auto 32px;
+      line-height: 1.7;
+    }
+
+    .header-divider {
+      width: 48px;
+      height: 2px;
+      background: var(--gold);
+      margin: 0 auto;
+      border-radius: 2px;
+    }
+
+    /* ============================================================
+       INTRO STRIP
+    ============================================================ */
+    .intro-strip {
+      background: var(--ink);
+      border-radius: var(--radius-lg);
+      padding: 28px 36px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 48px;
+      animation: fadeSlideDown 0.7s 0.15s ease both;
+    }
+
+    .intro-strip .icon-lock {
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+
+    .intro-strip p {
+      font-size: 13.5px;
+      font-weight: 300;
+      color: rgba(247,244,238,0.82);
+      line-height: 1.65;
+    }
+
+    .intro-strip strong {
+      color: var(--gold-light);
+      font-weight: 500;
+    }
+
+    /* ============================================================
+       MODULES GRID
+    ============================================================ */
+    .section-label {
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 20px;
+      animation: fadeSlideDown 0.6s 0.2s ease both;
+    }
+
+    .modules-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 56px;
+    }
+
+    /* ============================================================
+       MODULE CARD
+    ============================================================ */
+    .module-card {
+      background: #fff;
+      border: 1.5px solid var(--cream-dark);
+      border-radius: var(--radius-lg);
+      padding: 28px 32px;
+      display: grid;
+      grid-template-columns: 56px 1fr auto;
+      align-items: center;
+      gap: 24px;
+      transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+      animation: fadeSlideUp 0.6s ease both;
+      cursor: default;
+    }
+
+    .module-card:nth-child(1) { animation-delay: 0.25s; }
+    .module-card:nth-child(2) { animation-delay: 0.35s; }
+    .module-card:nth-child(3) { animation-delay: 0.45s; }
+    .module-card:nth-child(4) { animation-delay: 0.55s; }
+
+    .module-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+
+    /* Etat libre */
+    .module-card.free {
+      border-color: rgba(184,149,58,0.25);
+    }
+    .module-card.free:hover {
+      border-color: rgba(184,149,58,0.5);
+    }
+
+    /* Etat verrouillé */
+    .module-card.locked {
+      background: var(--cream);
+    }
+
+    /* ============================================================
+       MODULE NUMERO
+    ============================================================ */
+    .module-num {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .module-card.free .module-num {
+      background: var(--gold-pale);
+      color: var(--gold);
+    }
+
+    .module-card[data-module="2"] .module-num { background: var(--blue-pale); color: var(--blue-ink); }
+    .module-card[data-module="3"] .module-num { background: var(--sage-pale); color: var(--sage); }
+    .module-card[data-module="4"] .module-num { background: var(--terra-pale); color: var(--terra); }
+
+    .module-card.locked .module-num {
+      background: var(--cream-dark) !important;
+      color: var(--ink-muted) !important;
+    }
+
+    /* ============================================================
+       MODULE BODY
+    ============================================================ */
+    .module-body {}
+
+    .module-tag {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .module-card.free .module-tag { color: var(--gold); }
+    .module-card[data-module="2"] .module-tag { color: var(--blue-ink); }
+    .module-card[data-module="3"] .module-tag { color: var(--sage); }
+    .module-card[data-module="4"] .module-tag { color: var(--terra); }
+    .module-card.locked .module-tag { color: var(--ink-muted) !important; }
+
+    .module-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 18px;
+      line-height: 1.25;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .module-card.locked .module-title {
+      color: var(--ink-soft);
+    }
+
+    .module-desc {
+      font-size: 12.5px;
+      font-weight: 300;
+      color: var(--ink-muted);
+      line-height: 1.55;
+    }
+
+    .module-chapters {
+      margin-top: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .chapter-pill {
+      font-size: 10.5px;
+      font-weight: 400;
+      color: var(--ink-soft);
+      background: var(--cream-dark);
+      border-radius: 20px;
+      padding: 2px 9px;
+      white-space: nowrap;
+    }
+
+    /* ============================================================
+       MODULE ACTION
+    ============================================================ */
+    .module-action {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .badge-free {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--sage);
+      background: var(--sage-pale);
+      border-radius: 20px;
+      padding: 4px 10px;
+    }
+
+    .badge-locked {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      background: var(--cream-dark);
+      border-radius: 20px;
+      padding: 4px 10px;
+    }
+
+    .btn-access {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12.5px;
+      font-weight: 500;
+      padding: 9px 18px;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn-access.open {
+      background: var(--ink);
+      color: var(--cream);
+    }
+    .btn-access.open:hover {
+      background: var(--gold);
+      color: var(--ink);
+    }
+
+    .btn-access.unlock {
+      background: transparent;
+      color: var(--ink-soft);
+      border: 1.5px solid var(--cream-dark);
+    }
+    .btn-access.unlock:hover {
+      border-color: var(--ink-soft);
+      color: var(--ink);
+    }
+
+    /* ============================================================
+       MODAL UNLOCK
+    ============================================================ */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(28,26,23,0.55);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .modal-overlay.active {
+      display: flex;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .modal-box {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 24px 64px rgba(28,26,23,0.2);
+      animation: scaleIn 0.25s ease;
+    }
+
+    .modal-eyebrow {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .modal-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+
+    .modal-module-name {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--ink-soft);
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--cream-dark);
+    }
+
+    .modal-module-name strong {
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .modal-label {
+      font-size: 11.5px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      color: var(--ink-soft);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .modal-input-wrap {
+      position: relative;
+      margin-bottom: 8px;
+    }
+
+    .modal-input {
+      width: 100%;
+      padding: 12px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      border: 1.5px solid var(--cream-dark);
+      border-radius: var(--radius-sm);
+      background: var(--cream);
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .modal-input:focus {
+      border-color: var(--gold);
+      background: #fff;
+    }
+    .modal-input.error {
+      border-color: var(--terra);
+      background: var(--terra-pale);
+    }
+
+    .modal-error {
+      font-size: 12px;
+      color: var(--terra);
+      margin-bottom: 20px;
+      min-height: 16px;
+      font-weight: 400;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .btn-modal-cancel {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      padding: 10px 18px;
+      border: 1.5px solid var(--cream-dark);
+      border-radius: var(--radius-sm);
+      background: transparent;
+      color: var(--ink-soft);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-modal-cancel:hover {
+      border-color: var(--ink-soft);
+      color: var(--ink);
+    }
+
+    .btn-modal-confirm {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 10px 22px;
+      background: var(--ink);
+      color: var(--cream);
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-modal-confirm:hover {
+      background: var(--gold);
+      color: var(--ink);
+    }
+
+    /* ============================================================
+       ADMIN PANEL
+    ============================================================ */
+    .admin-toggle {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .btn-admin {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      background: transparent;
+      border: 1.5px dashed var(--cream-dark);
+      border-radius: 20px;
+      padding: 7px 18px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-admin:hover {
+      color: var(--ink-soft);
+      border-color: var(--ink-muted);
+    }
+
+    .admin-panel {
+      display: none;
+      background: var(--ink);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      margin-bottom: 40px;
+      animation: fadeSlideDown 0.3s ease;
+    }
+
+    .admin-panel.active {
+      display: block;
+    }
+
+    .admin-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 18px;
+      color: var(--gold-light);
+      margin-bottom: 4px;
+    }
+    .admin-sub {
+      font-size: 12px;
+      color: rgba(247,244,238,0.5);
+      margin-bottom: 24px;
+    }
+
+    .admin-auth {
+      margin-bottom: 24px;
+    }
+
+    .admin-auth-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .admin-input {
+      flex: 1;
+      padding: 10px 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      background: rgba(247,244,238,0.08);
+      border: 1.5px solid rgba(247,244,238,0.15);
+      border-radius: var(--radius-sm);
+      color: var(--cream);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .admin-input::placeholder { color: rgba(247,244,238,0.3); }
+    .admin-input:focus { border-color: var(--gold); }
+
+    .btn-admin-auth {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12.5px;
+      font-weight: 500;
+      padding: 10px 18px;
+      background: var(--gold);
+      color: var(--ink);
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-admin-auth:hover { background: var(--gold-light); }
+
+    .admin-modules {
+      display: none;
+    }
+    .admin-modules.active {
+      display: block;
+    }
+
+    .admin-modules-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(247,244,238,0.45);
+      margin-bottom: 14px;
+    }
+
+    .admin-module-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(247,244,238,0.08);
+      gap: 16px;
+    }
+    .admin-module-row:last-child { border-bottom: none; }
+
+    .admin-module-info {}
+    .admin-module-name {
+      font-size: 13.5px;
+      font-weight: 400;
+      color: var(--cream);
+      margin-bottom: 2px;
+    }
+    .admin-module-file {
+      font-size: 10.5px;
+      color: rgba(247,244,238,0.35);
+      font-family: monospace;
+    }
+
+    .admin-module-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .admin-code-input {
+      width: 140px;
+      padding: 7px 11px;
+      font-family: monospace;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      background: rgba(247,244,238,0.07);
+      border: 1.5px solid rgba(247,244,238,0.12);
+      border-radius: var(--radius-sm);
+      color: var(--gold-light);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .admin-code-input:focus { border-color: var(--gold); }
+    .admin-code-input::placeholder { color: rgba(247,244,238,0.2); font-family: 'DM Sans', sans-serif; font-size: 11px; letter-spacing: 0; }
+
+    /* Toggle switch */
+    .toggle-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toggle-label {
+      font-size: 11px;
+      color: rgba(247,244,238,0.45);
+      white-space: nowrap;
+    }
+
+    .toggle {
+      position: relative;
+      width: 40px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: rgba(247,244,238,0.15);
+      border-radius: 22px;
+      cursor: pointer;
+      transition: 0.25s;
+    }
+    .toggle-slider:before {
+      content: '';
+      position: absolute;
+      height: 16px;
+      width: 16px;
+      left: 3px;
+      bottom: 3px;
+      background: rgba(247,244,238,0.6);
+      border-radius: 50%;
+      transition: 0.25s;
+    }
+    .toggle input:checked + .toggle-slider {
+      background: var(--gold);
+    }
+    .toggle input:checked + .toggle-slider:before {
+      transform: translateX(18px);
+      background: var(--ink);
+    }
+
+    .admin-save-row {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .btn-admin-save {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12.5px;
+      font-weight: 500;
+      padding: 10px 22px;
+      background: var(--gold);
+      color: var(--ink);
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-admin-save:hover { background: var(--gold-light); }
+
+    .admin-save-note {
+      font-size: 11px;
+      color: rgba(247,244,238,0.3);
+      line-height: 1.5;
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    .site-footer {
+      text-align: center;
+      padding-top: 40px;
+      border-top: 1px solid var(--cream-dark);
+      animation: fadeIn 0.6s 0.7s ease both;
+    }
+
+    .footer-brand {
+      font-family: 'DM Serif Display', serif;
+      font-size: 15px;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .footer-sub {
+      font-size: 11.5px;
+      color: var(--ink-muted);
+      font-weight: 300;
+    }
+
+    .footer-sub a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+    .footer-sub a:hover { text-decoration: underline; }
+
+    /* ============================================================
+       ANIMATIONS
+    ============================================================ */
+    @keyframes fadeSlideDown {
+      from { opacity: 0; transform: translateY(-14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 640px) {
+      .module-card {
+        grid-template-columns: 44px 1fr;
+        grid-template-rows: auto auto;
+      }
+      .module-action {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 12px;
+        border-top: 1px solid var(--cream-dark);
+      }
+      .intro-strip {
+        padding: 20px 20px;
+      }
+      .modal-box {
+        padding: 28px 24px;
+      }
+      .admin-module-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .admin-module-controls {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     HEADER
+============================================================ -->
+<div class="site-wrapper">
+
+  <header class="site-header">
+    <span class="brand-eyebrow">Etik conseil &amp; formation</span>
+    <h1 class="site-title">Maîtriser <em>Claude</em></h1>
+    <p class="site-subtitle">Quatre modules pour passer de l'usage courant à la maîtrise complète de Claude, Claude Cowork et des agents IA.</p>
+    <div class="header-divider"></div>
+  </header>
+
+  <!-- INTRO STRIP -->
+  <div class="intro-strip">
+    <span class="icon-lock">🔐</span>
+    <p>Le <strong>module 1 est en accès libre</strong>. Les modules suivants sont déverrouillés avec un code d'accès personnel transmis par le formateur. Contactez <strong>samibm@etik.com</strong> pour obtenir l'accès à un module.</p>
+  </div>
+
+  <!-- MODULES -->
+  <p class="section-label">Parcours de formation — 4 modules</p>
+
+  <div class="modules-grid">
+
+    <!-- MODULE 1 : Tokens (LIBRE) -->
+    <div class="module-card free" data-module="1">
+      <div class="module-num">01</div>
+      <div class="module-body">
+        <span class="module-tag">Fondamentaux</span>
+        <h2 class="module-title">Maîtriser sa consommation de tokens</h2>
+        <p class="module-desc">Comment Claude consomme vos tokens, optimisation des pièces jointes, gestion des conversations longues, utilisation des Projets Claude.</p>
+        <div class="module-chapters">
+          <span class="chapter-pill">Comment Claude consomme les tokens</span>
+          <span class="chapter-pill">Longueur des conversations</span>
+          <span class="chapter-pill">Pièces jointes</span>
+          <span class="chapter-pill">Projets Claude</span>
+        </div>
+      </div>
+      <div class="module-action">
+        <span class="badge-free">✓ Accès libre</span>
+        <a href="optimiser-tokens-claude.html" class="btn-access open" target="_blank">
+          Ouvrir &rarr;
+        </a>
+      </div>
+    </div>
+
+    <!-- MODULE 2 : Guide formation 2026 -->
+    <div class="module-card locked" data-module="2" id="card-2">
+      <div class="module-num">02</div>
+      <div class="module-body">
+        <span class="module-tag">Formation complète</span>
+        <h2 class="module-title">Maîtriser Claude de A à Z</h2>
+        <p class="module-desc">Plans, tarifs, création de compte, interface, paramètres, art du prompting avec la méthode GCAO, organisation par Projets.</p>
+        <div class="module-chapters">
+          <span class="chapter-pill">Plans &amp; tarifs</span>
+          <span class="chapter-pill">Interface &amp; paramètres</span>
+          <span class="chapter-pill">Méthode GCAO</span>
+          <span class="chapter-pill">Projets Claude</span>
+        </div>
+      </div>
+      <div class="module-action">
+        <span class="badge-locked">🔒 Accès restreint</span>
+        <button class="btn-access unlock" onclick="openModal(2, 'Maîtriser Claude de A à Z', 'guide-formation-claude-2026.html')">
+          Déverrouiller
+        </button>
+      </div>
+    </div>
+
+    <!-- MODULE 3 : Agents IA -->
+    <div class="module-card locked" data-module="3" id="card-3">
+      <div class="module-num">03</div>
+      <div class="module-body">
+        <span class="module-tag">Agents IA</span>
+        <h2 class="module-title">Créer une équipe d'agents IA</h2>
+        <p class="module-desc">Poser les fondations du projet, configurer le fichier CLAUDE.md, créer et orchestrer quatre agents spécialisés qui travaillent à votre place.</p>
+        <div class="module-chapters">
+          <span class="chapter-pill">Fondations du projet</span>
+          <span class="chapter-pill">CLAUDE.md</span>
+          <span class="chapter-pill">4 agents spécialisés</span>
+          <span class="chapter-pill">Orchestration</span>
+        </div>
+      </div>
+      <div class="module-action">
+        <span class="badge-locked">🔒 Accès restreint</span>
+        <button class="btn-access unlock" onclick="openModal(3, 'Créer une équipe d\'agents IA', 'agents-ia-claude-guide.html')">
+          Déverrouiller
+        </button>
+      </div>
+    </div>
+
+    <!-- MODULE 4 : Claude Cowork -->
+    <div class="module-card locked" data-module="4" id="card-4">
+      <div class="module-num">04</div>
+      <div class="module-body">
+        <span class="module-tag">Claude Cowork</span>
+        <h2 class="module-title">De débutant aux agents automatisés</h2>
+        <p class="module-desc">Introduction à Claude Cowork, cas d'usage, bases, live artifacts, et mise en place de vos premiers agents de bureau automatisés.</p>
+        <div class="module-chapters">
+          <span class="chapter-pill">Introduction</span>
+          <span class="chapter-pill">Cas d'usage</span>
+          <span class="chapter-pill">Les bases</span>
+          <span class="chapter-pill">Live artifacts</span>
+        </div>
+      </div>
+      <div class="module-action">
+        <span class="badge-locked">🔒 Accès restreint</span>
+        <button class="btn-access unlock" onclick="openModal(4, 'Claude Cowork — De débutant aux agents automatisés', 'claude-cowork-formation.html')">
+          Déverrouiller
+        </button>
+      </div>
+    </div>
+
+  </div><!-- .modules-grid -->
+
+  <!-- ============================================================
+       ADMIN TOGGLE
+  ============================================================ -->
+  <div class="admin-toggle">
+    <button class="btn-admin" onclick="toggleAdmin()">⚙ Zone formateur</button>
+  </div>
+
+  <div class="admin-panel" id="adminPanel">
+    <div class="admin-title">Tableau de bord formateur</div>
+    <p class="admin-sub">Configurez les codes d'accès et l'état de chaque module.</p>
+
+    <div class="admin-auth" id="adminAuth">
+      <p style="font-size:12px;color:rgba(247,244,238,0.5);margin-bottom:12px;">Entrez le mot de passe formateur pour accéder aux paramètres.</p>
+      <div class="admin-auth-row">
+        <input type="password" class="admin-input" id="adminPwInput" placeholder="Mot de passe formateur" onkeydown="if(event.key==='Enter') authAdmin()">
+        <button class="btn-admin-auth" onclick="authAdmin()">Accéder</button>
+      </div>
+      <p id="adminAuthError" style="font-size:11.5px;color:#e07060;margin-top:8px;min-height:16px;"></p>
+    </div>
+
+    <div class="admin-modules" id="adminModules">
+      <p class="admin-modules-title">Gestion des accès par module</p>
+
+      <!-- Module 2 -->
+      <div class="admin-module-row">
+        <div class="admin-module-info">
+          <div class="admin-module-name">Module 02 — Maîtriser Claude de A à Z</div>
+          <div class="admin-module-file">guide-formation-claude-2026.html</div>
+        </div>
+        <div class="admin-module-controls">
+          <input type="text" class="admin-code-input" id="code-2" placeholder="Code d'accès" value="">
+          <div class="toggle-wrap">
+            <span class="toggle-label">Libre</span>
+            <label class="toggle">
+              <input type="checkbox" id="free-2" onchange="toggleModuleFree(2, this.checked)">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Module 3 -->
+      <div class="admin-module-row">
+        <div class="admin-module-info">
+          <div class="admin-module-name">Module 03 — Créer une équipe d'agents IA</div>
+          <div class="admin-module-file">agents-ia-claude-guide.html</div>
+        </div>
+        <div class="admin-module-controls">
+          <input type="text" class="admin-code-input" id="code-3" placeholder="Code d'accès" value="">
+          <div class="toggle-wrap">
+            <span class="toggle-label">Libre</span>
+            <label class="toggle">
+              <input type="checkbox" id="free-3" onchange="toggleModuleFree(3, this.checked)">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Module 4 -->
+      <div class="admin-module-row">
+        <div class="admin-module-info">
+          <div class="admin-module-name">Module 04 — Claude Cowork</div>
+          <div class="admin-module-file">claude-cowork-formation.html</div>
+        </div>
+        <div class="admin-module-controls">
+          <input type="text" class="admin-code-input" id="code-4" placeholder="Code d'accès" value="">
+          <div class="toggle-wrap">
+            <span class="toggle-label">Libre</span>
+            <label class="toggle">
+              <input type="checkbox" id="free-4" onchange="toggleModuleFree(4, this.checked)">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-save-row">
+        <button class="btn-admin-save" onclick="saveAdminConfig()">Enregistrer la configuration</button>
+        <p class="admin-save-note">La configuration est sauvegardée<br>dans le navigateur (localStorage).</p>
+      </div>
+    </div><!-- .admin-modules -->
+  </div><!-- .admin-panel -->
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-brand">Etik conseil &amp; formation</div>
+    <p class="footer-sub">
+      Sami Ben Mansour &mdash; <a href="https://samibenmansour.com" target="_blank">samibenmansour.com</a> &mdash; <a href="mailto:samibm@etik.com">samibm@etik.com</a>
+    </p>
+  </footer>
+
+</div><!-- .site-wrapper -->
+
+<!-- ============================================================
+     MODAL DEBLOCAGE
+============================================================ -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal-box">
+    <span class="modal-eyebrow">Accès sécurisé</span>
+    <h2 class="modal-title">Déverrouiller le module</h2>
+    <p class="modal-module-name">Module : <strong id="modalModuleName"></strong></p>
+    <label class="modal-label" for="codeInput">Votre code d'accès</label>
+    <div class="modal-input-wrap">
+      <input
+        type="text"
+        id="codeInput"
+        class="modal-input"
+        placeholder="ex. ETIK-LAB-72"
+        autocomplete="off"
+        onkeydown="if(event.key==='Enter') confirmCode()"
+      >
+    </div>
+    <p class="modal-error" id="modalError"></p>
+    <div class="modal-actions">
+      <button class="btn-modal-cancel" onclick="closeModal()">Annuler</button>
+      <button class="btn-modal-confirm" onclick="confirmCode()">Accéder &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     JAVASCRIPT
+============================================================ -->
+<script>
+  // ---- CONSTANTES ----
+  const ADMIN_PASSWORD = 'etik-admin-2026';
+  const STORAGE_KEY    = 'etik-claude-config';
+
+  // ---- ETAT ----
+  let currentModal = { moduleId: null, moduleFile: null };
+
+  // ---- CONFIG PAR DEFAUT (codes préchargés) ----
+  const defaultConfig = {
+    codes: { 2: 'ETIK-LAB-72', 3: 'ETIK-LAB-73', 4: 'ETIK-LAB-74' },
+    free:  { 2: false, 3: false, 4: false }
+  };
+
+  // ---- LOAD CONFIG ----
+  function loadConfig() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : { ...defaultConfig };
+    } catch(e) {
+      return { ...defaultConfig };
+    }
+  }
+
+  function saveConfig(cfg) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(cfg));
+  }
+
+  // ---- INIT : appliquer la config saved au chargement ----
+  function applyConfig() {
+    const cfg = loadConfig();
+    [2, 3, 4].forEach(id => {
+      if (cfg.free[id]) {
+        setModuleAsFree(id, cfg.codes[id] || '');
+      }
+      // Si l'apprenant a déjà un code valide en session
+      const sessionKey = 'unlocked-' + id;
+      if (sessionStorage.getItem(sessionKey) === 'true') {
+        setModuleUnlocked(id, cfg.codes[id] || '');
+      }
+    });
+  }
+
+  // ---- RENDRE UN MODULE LIBRE (sans code) ----
+  function setModuleAsFree(moduleId, targetFile) {
+    const card = document.getElementById('card-' + moduleId);
+    if (!card) return;
+    card.classList.remove('locked');
+    card.classList.add('free');
+
+    const badge = card.querySelector('.badge-locked');
+    if (badge) {
+      badge.className = 'badge-free';
+      badge.textContent = '✓ Accès libre';
+    }
+
+    const btn = card.querySelector('.btn-access');
+    if (btn) {
+      btn.className = 'btn-access open';
+      btn.textContent = 'Ouvrir →';
+      btn.removeAttribute('onclick');
+      if (targetFile) {
+        btn.setAttribute('href', targetFile);
+        btn.setAttribute('target', '_blank');
+        // Transformer en <a> si besoin
+        const a = document.createElement('a');
+        a.className = 'btn-access open';
+        a.href = targetFile;
+        a.target = '_blank';
+        a.textContent = 'Ouvrir →';
+        btn.replaceWith(a);
+      }
+    }
+  }
+
+  // ---- APRES CODE VALIDE ----
+  function setModuleUnlocked(moduleId, targetFile) {
+    setModuleAsFree(moduleId, targetFile);
+  }
+
+  // ---- OUVRIR MODAL ----
+  function openModal(moduleId, moduleName, moduleFile) {
+    const cfg = loadConfig();
+    // Si pas de code configuré : avertir
+    if (!cfg.codes[moduleId]) {
+      document.getElementById('modalError').textContent =
+        'Ce module n\'a pas encore de code configuré. Contactez le formateur.';
+    } else {
+      document.getElementById('modalError').textContent = '';
+    }
+    currentModal.moduleId   = moduleId;
+    currentModal.moduleFile = moduleFile;
+    document.getElementById('modalModuleName').textContent = moduleName;
+    document.getElementById('codeInput').value = '';
+    document.getElementById('codeInput').classList.remove('error');
+    document.getElementById('modalOverlay').classList.add('active');
+    setTimeout(() => document.getElementById('codeInput').focus(), 100);
+  }
+
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('active');
+    currentModal = { moduleId: null, moduleFile: null };
+  }
+
+  function closeModalOutside(e) {
+    if (e.target === document.getElementById('modalOverlay')) closeModal();
+  }
+
+  // ---- VALIDER CODE ----
+  function confirmCode() {
+    const cfg     = loadConfig();
+    const input   = document.getElementById('codeInput');
+    const entered = input.value.trim().toUpperCase();
+    const stored  = (cfg.codes[currentModal.moduleId] || '').trim().toUpperCase();
+
+    if (!stored) {
+      document.getElementById('modalError').textContent =
+        'Aucun code configuré pour ce module. Contactez le formateur.';
+      return;
+    }
+
+    if (entered === stored) {
+      // Succès
+      sessionStorage.setItem('unlocked-' + currentModal.moduleId, 'true');
+      setModuleUnlocked(currentModal.moduleId, currentModal.moduleFile);
+      closeModal();
+      // Ouvrir le module
+      if (currentModal.moduleFile) {
+        window.open(currentModal.moduleFile, '_blank');
+      }
+    } else {
+      input.classList.add('error');
+      document.getElementById('modalError').textContent =
+        'Code incorrect. Vérifiez votre code ou contactez le formateur.';
+    }
+  }
+
+  // ---- ADMIN PANEL ----
+  function toggleAdmin() {
+    const panel = document.getElementById('adminPanel');
+    panel.classList.toggle('active');
+    if (!panel.classList.contains('active')) {
+      // Reset auth si on ferme
+      document.getElementById('adminModules').classList.remove('active');
+    }
+  }
+
+  function authAdmin() {
+    const input = document.getElementById('adminPwInput').value;
+    if (input === ADMIN_PASSWORD) {
+      document.getElementById('adminAuth').style.display = 'none';
+      loadAdminForm();
+      document.getElementById('adminModules').classList.add('active');
+    } else {
+      document.getElementById('adminAuthError').textContent = 'Mot de passe incorrect.';
+    }
+  }
+
+  function loadAdminForm() {
+    const cfg = loadConfig();
+    [2, 3, 4].forEach(id => {
+      const codeInput = document.getElementById('code-' + id);
+      const freeToggle = document.getElementById('free-' + id);
+      if (codeInput) codeInput.value = cfg.codes[id] || '';
+      if (freeToggle) freeToggle.checked = cfg.free[id] || false;
+    });
+  }
+
+  function toggleModuleFree(moduleId, isFree) {
+    // Feedback visuel immédiat
+    const cfg = loadConfig();
+    if (isFree) {
+      setModuleAsFree(moduleId, getModuleFile(moduleId));
+    }
+  }
+
+  function getModuleFile(moduleId) {
+    const files = {
+      2: 'guide-formation-claude-2026.html',
+      3: 'agents-ia-claude-guide.html',
+      4: 'claude-cowork-formation.html'
+    };
+    return files[moduleId];
+  }
+
+  function saveAdminConfig() {
+    const cfg = loadConfig();
+    [2, 3, 4].forEach(id => {
+      const codeInput  = document.getElementById('code-' + id);
+      const freeToggle = document.getElementById('free-' + id);
+      if (codeInput)  cfg.codes[id] = codeInput.value.trim().toUpperCase();
+      if (freeToggle) cfg.free[id]  = freeToggle.checked;
+    });
+    saveConfig(cfg);
+
+    // Feedback visuel
+    const btn = document.querySelector('.btn-admin-save');
+    const orig = btn.textContent;
+    btn.textContent = '✓ Enregistré';
+    btn.style.background = '#5A7A5A';
+    setTimeout(() => {
+      btn.textContent = orig;
+      btn.style.background = '';
+      applyConfig(); // re-appliquer
+    }, 2000);
+  }
+
+  // ---- INIT ----
+  document.addEventListener('DOMContentLoaded', applyConfig);
+</script>
+
+</body>
+</html>
