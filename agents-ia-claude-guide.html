@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Créer une équipe d'agents IA dans Claude</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0e0e0e;
+    --paper: #f5f2ec;
+    --accent: #c84b2f;
+    --accent-soft: #f0dbd5;
+    --mid: #6b6560;
+    --rule: #d9d4cc;
+    --code-bg: #1a1916;
+    --code-fg: #e8e0d0;
+    --tag-bg: #e8e3da;
+    --highlight: #f7e96e;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Instrument Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 17px;
+    line-height: 1.7;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 64px 32px 56px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .header-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: inline-block;
+    border: 1px solid var(--accent);
+    padding: 4px 10px;
+    margin-bottom: 28px;
+  }
+
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    line-height: 1.1;
+    max-width: 680px;
+    margin-bottom: 20px;
+    letter-spacing: -0.01em;
+  }
+
+  header h1 em {
+    font-style: italic;
+    color: #f7e96e;
+  }
+
+  .header-sub {
+    color: #aaa49c;
+    font-size: 15px;
+    max-width: 560px;
+    line-height: 1.6;
+  }
+
+  .header-deco {
+    position: absolute;
+    right: -40px;
+    top: -60px;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,75,47,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* NAV FLOTTANTE */
+  .toc {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    max-width: 900px;
+    margin: 40px auto 0;
+    padding: 0 32px;
+  }
+
+  .toc-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 0;
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mid);
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+  }
+
+  .toc-toggle:hover { color: var(--ink); }
+
+  .toc-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 32px;
+    padding-bottom: 20px;
+    border-top: 1px solid var(--rule);
+    padding-top: 16px;
+  }
+
+  .toc-body a {
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 14px;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 4px 0;
+    transition: color 0.15s;
+  }
+
+  .toc-body a:hover { color: var(--accent); }
+
+  .toc-body a .num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    min-width: 20px;
+  }
+
+  /* LAYOUT PRINCIPAL */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px 32px 80px;
+  }
+
+  /* SECTION */
+  .section {
+    padding: 56px 0 0;
+    border-top: 1px solid var(--rule);
+    margin-top: 48px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .section.visible { opacity: 1; transform: none; }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 28px;
+  }
+
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    padding-top: 6px;
+    min-width: 28px;
+  }
+
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    line-height: 1.15;
+    color: var(--ink);
+  }
+
+  p { margin-bottom: 1.1em; color: #2a2724; }
+
+  /* POINTS CLÉS INLINE */
+  .key {
+    background: var(--highlight);
+    padding: 1px 5px;
+    border-radius: 2px;
+    font-weight: 600;
+  }
+
+  /* CALLOUT */
+  .callout {
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    padding: 16px 20px;
+    margin: 24px 0;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .callout-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  .callout p { margin: 0; color: var(--ink); font-size: 15px; }
+
+  /* CODE BLOCK */
+  .code-block {
+    background: var(--code-bg);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    overflow-x: auto;
+    position: relative;
+  }
+
+  .code-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 10px;
+  }
+
+  .code-block code {
+    font-family: 'DM Mono', monospace;
+    font-size: 13.5px;
+    color: var(--code-fg);
+    line-height: 1.75;
+    display: block;
+    white-space: pre-wrap;
+  }
+
+  .code-block code .comment { color: #6b7280; font-style: italic; }
+  .code-block code .cmd { color: #f7e96e; }
+  .code-block code .val { color: #86efac; }
+
+  /* ÉTAPES / STEPS */
+  .steps {
+    counter-reset: steps;
+    margin: 24px 0;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 0 16px;
+    margin-bottom: 20px;
+    align-items: start;
+  }
+
+  .step-num {
+    counter-increment: steps;
+    width: 36px;
+    height: 36px;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .step-body strong {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--ink);
+  }
+
+  .step-body p { margin: 0; font-size: 15px; }
+
+  /* AGENT CARDS */
+  .agents-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    margin: 28px 0;
+  }
+
+  .agent-card {
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 20px;
+    background: white;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .agent-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 4px 16px rgba(200,75,47,0.08);
+  }
+
+  .agent-icon {
+    font-size: 24px;
+    margin-bottom: 12px;
+  }
+
+  .agent-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  .agent-desc {
+    font-size: 14px;
+    color: var(--mid);
+    margin: 0;
+  }
+
+  /* FLOW DIAGRAM */
+  .flow {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 28px 0;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+
+  .flow-node {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 12px 16px;
+    font-size: 13px;
+    white-space: nowrap;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .flow-node strong {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 3px;
+  }
+
+  .flow-arrow {
+    color: var(--rule);
+    font-size: 20px;
+    padding: 0 8px;
+    flex-shrink: 0;
+  }
+
+  /* TOKEN TABLE */
+  .token-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 14.5px;
+  }
+
+  .token-table th {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mid);
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 2px solid var(--ink);
+    background: transparent;
+  }
+
+  .token-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+
+  .token-table tr:last-child td { border-bottom: none; }
+
+  .token-table tr:nth-child(even) td { background: rgba(0,0,0,0.02); }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+  }
+
+  .badge-green { background: #dcfce7; color: #166534; }
+  .badge-red { background: #fee2e2; color: #991b1b; }
+  .badge-yellow { background: #fef9c3; color: #854d0e; }
+
+  /* TIPS GRID */
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
+    margin: 24px 0;
+  }
+
+  .tip-card {
+    padding: 16px 18px;
+    border-radius: 6px;
+    border: 1px solid var(--rule);
+    background: white;
+  }
+
+  .tip-card .tip-icon { font-size: 18px; margin-bottom: 8px; }
+
+  .tip-card strong {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 4px;
+    color: var(--ink);
+  }
+
+  .tip-card p { font-size: 13px; color: var(--mid); margin: 0; }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    color: var(--mid);
+    text-align: center;
+    padding: 32px;
+    font-size: 13px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  footer span { color: var(--accent); }
+
+  /* SCROLL TO TOP */
+  .back-top {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 100;
+  }
+
+  .back-top.show { opacity: 1; }
+  .back-top:hover { background: var(--accent); }
+
+  @media (max-width: 640px) {
+    main { padding: 16px 18px 60px; }
+    .header-inner { padding: 40px 20px 36px; }
+    .toc { margin: 20px 18px 0; padding: 0 18px; }
+    .toc-body { grid-template-columns: 1fr; }
+    .flow { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+    .agents-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-deco"></div>
+  <div class="header-inner">
+    <div class="header-label">Guide pratique · Claude Code &amp; Agents</div>
+    <h1>Créer une équipe d'agents IA dans Claude <em>qui travaillent à votre place</em></h1>
+    <p class="header-sub">Comment architecturer, orchestrer et optimiser des agents autonomes dans Claude Code — pour tout professionnel, quel que soit son métier.</p>
+  </div>
+</header>
+
+<div class="toc">
+  <button class="toc-toggle" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'grid' : 'none'">
+    <span>Table des matières</span>
+    <span>↕</span>
+  </button>
+  <nav class="toc-body">
+    <a href="#fondations"><span class="num">01</span> Poser les fondations</a>
+    <a href="#cerveau"><span class="num">02</span> Le cerveau du projet : CLAUDE.md</a>
+    <a href="#agents"><span class="num">03</span> Les quatre agents spécialisés</a>
+    <a href="#orchestration"><span class="num">04</span> Orchestrer une équipe d'agents</a>
+    <a href="#plugins"><span class="num">05</span> Packager en plugin réutilisable</a>
+    <a href="#tokens"><span class="num">06</span> Optimiser la gestion des tokens</a>
+    <a href="#recapitulatif"><span class="num">07</span> Récapitulatif opérationnel</a>
+  </nav>
+</div>
+
+<main>
+
+  <!-- INTRO -->
+  <section class="section" id="intro">
+    <div class="callout">
+      <div class="callout-label">Contexte</div>
+      <p>Ce guide s'appuie sur un cas réel : la construction d'une équipe marketing complète (4 agents + 1 orchestrateur) autour d'une marque fictive. Les principes sont transposables à n'importe quel domaine — RH, finance, juridique, commercial, formation.</p>
+    </div>
+  </section>
+
+  <!-- 01 FONDATIONS -->
+  <section class="section" id="fondations">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2 class="section-title">Poser les fondations du projet</h2>
+    </div>
+
+    <p>Avant de créer le moindre agent, il faut constituer une <span class="key">base de connaissance structurée</span> dans un dossier dédié. C'est la matière première que tous les agents partageront.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <strong>Créer l'arborescence du projet</strong>
+          <p>Un dossier racine avec des sous-dossiers clairs : <code>contexte/</code>, <code>pos/</code>, <code>exemples/</code>, <code>data/</code>, <code>trimestre/</code>, <code>réseau/</code>. Tous vides au départ — ils seront remplis progressivement.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <strong>Générer les fichiers de contexte (.md)</strong>
+          <p>Demander à Claude de produire 3 à 4 fichiers Markdown documentant votre sujet : historique, produits/services, style de communication, stratégie. <span class="key">Plus ces fichiers sont détaillés, plus les agents seront précis.</span></p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <strong>Télécharger et placer dans <code>contexte/</code></strong>
+          <p>Ces fichiers servent de mémoire partagée à toute l'équipe d'agents. Ils sont lus automatiquement à chaque initialisation.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-label">Astuce tokens</div>
+      <p>Des fichiers de contexte bien structurés réduisent la répétition dans chaque prompt. L'agent n'a pas besoin qu'on lui réexplique le contexte à chaque fois : il le lit une fois dans CLAUDE.md.</p>
+    </div>
+  </section>
+
+  <!-- 02 CERVEAU -->
+  <section class="section" id="cerveau">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Le cerveau du projet : CLAUDE.md</h2>
+    </div>
+
+    <p>Le fichier <code>CLAUDE.md</code> est le point névralgique de tout projet Claude Code. C'est la <span class="key">mémoire persistante</span> du projet : Claude le lit systématiquement au lancement et y retrouve les règles, la structure, le ton, les outils disponibles.</p>
+
+    <div class="code-block">
+      <div class="code-label">Commande d'initialisation</div>
+      <code><span class="comment"># Dans Claude Code, première action à faire :</span>
+<span class="cmd">Initialise un fichier CLAUDE.md pour ce projet.</span>
+<span class="comment"># Claude lit tous les fichiers du dossier et génère
+# un document racine synthétique automatiquement.</span></code>
+    </div>
+
+    <p>Le fichier généré contiendra typiquement :</p>
+
+    <div class="tips-grid">
+      <div class="tip-card">
+        <div class="tip-icon">🗂️</div>
+        <strong>Structure du répertoire</strong>
+        <p>L'arborescence des dossiers et leur rôle.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">🎯</div>
+        <strong>Mission &amp; règles</strong>
+        <p>Les contraintes à respecter (ton, langue, format de sortie).</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">🔧</div>
+        <strong>Skills disponibles</strong>
+        <p>La liste des agents/compétences activables via <code>/</code>.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">✏️</div>
+        <strong>Modifiable à tout moment</strong>
+        <p>Vous pouvez éditer ce fichier manuellement pour enrichir ou corriger le contexte.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-label">Principe clé</div>
+      <p>Un bon CLAUDE.md évite de répéter le contexte dans chaque prompt. C'est l'équivalent d'un brief permanent que l'agent consulte avant chaque tâche — une économie massive de tokens sur la durée.</p>
+    </div>
+  </section>
+
+  <!-- 03 AGENTS -->
+  <section class="section" id="agents">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Les quatre agents spécialisés</h2>
+    </div>
+
+    <p>Chaque agent est un <span class="key">skill</span> : un fichier Markdown structuré qui définit les capacités, les étapes et les outils d'un agent. Une fois créé, il s'appelle avec <code>/nom-du-skill</code>.</p>
+
+    <div class="agents-grid">
+      <div class="agent-card">
+        <div class="agent-icon">🔍</div>
+        <div class="agent-name">Agent 1 · Recherche</div>
+        <p class="agent-desc">Analyse de marché, veille concurrentielle, identification des tendances. Connecté à Perplexity via MCP pour des données en temps réel.</p>
+      </div>
+      <div class="agent-card">
+        <div class="agent-icon">✍️</div>
+        <div class="agent-name">Agent 2 · Contenu</div>
+        <p class="agent-desc">Création de posts pour les réseaux sociaux, s'appuyant sur l'analyse des meilleurs contenus existants et les frameworks de storytelling.</p>
+      </div>
+      <div class="agent-card">
+        <div class="agent-icon">📊</div>
+        <div class="agent-name">Agent 3 · Données</div>
+        <p class="agent-desc">Analyse de fichiers Excel de performance, génération de dashboards HTML interactifs, extraction d'insights actionnables.</p>
+      </div>
+      <div class="agent-card">
+        <div class="agent-icon">🖥️</div>
+        <div class="agent-name">Agent 4 · Présentation</div>
+        <p class="agent-desc">Transformation des livrables en présentations PowerPoint soignées, avec charte graphique intégrée et titres narratifs.</p>
+      </div>
+    </div>
+
+    <h3 style="font-family:'DM Serif Display',serif; font-size:1.3rem; margin:32px 0 16px;">Comment créer un skill agent</h3>
+
+    <div class="code-block">
+      <div class="code-label">Prompt type pour créer un agent</div>
+      <code><span class="cmd">Lis le document POS dans le dossier pos/.
+Transforme-le en un skill appelé "agent-recherche"
+capable de faire des analyses de marché.
+
+Avant de commencer, s'il existe des fichiers
+pertinents dans contexte/ ou CLAUDE.md, lis-les.
+
+Ce skill doit :
+- Suivre les étapes définies dans le POS
+- Utiliser Perplexity (MCP) pour la recherche
+- Enregistrer les résultats dans data/
+- Utiliser le skill-creator pour sa construction</span></code>
+    </div>
+
+    <div class="callout">
+      <div class="callout-label">À retenir</div>
+      <p>Un skill bien rédigé contient : son objectif, ses entrées, ses étapes, ses outils, et le format de sortie attendu. Plus le skill est précis, moins Claude improvise — et moins il consomme de tokens en clarifications inutiles.</p>
+    </div>
+
+    <h3 style="font-family:'DM Serif Display',serif; font-size:1.3rem; margin:32px 0 16px;">Connexion aux outils via MCP</h3>
+    <p>Les agents peuvent se connecter à des services externes via le protocole MCP (Model Context Protocol). Exemples utiles :</p>
+
+    <table class="token-table">
+      <thead>
+        <tr>
+          <th>Outil MCP</th>
+          <th>Usage typique</th>
+          <th>Type d'agent</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Perplexity</strong></td>
+          <td>Recherche web en temps réel, veille concurrentielle</td>
+          <td>Recherche</td>
+        </tr>
+        <tr>
+          <td><strong>Nano Banana</strong></td>
+          <td>Génération d'images et visuels</td>
+          <td>Contenu visuel</td>
+        </tr>
+        <tr>
+          <td><strong>Google Drive / Slack</strong></td>
+          <td>Récupération et diffusion de fichiers</td>
+          <td>Coordination</td>
+        </tr>
+        <tr>
+          <td><strong>CRM / Excel</strong></td>
+          <td>Lecture de données structurées</td>
+          <td>Analyse</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 04 ORCHESTRATION -->
+  <section class="section" id="orchestration">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Orchestrer une équipe d'agents</h2>
+    </div>
+
+    <p>L'intérêt des agents ne réside pas dans leur utilisation individuelle, mais dans leur <span class="key">collaboration orchestrée</span>. Un 5e agent-orchestrateur pilote les quatre autres, répartit les tâches en parallèle, organise les révisions croisées et consolide les livrables.</p>
+
+    <div class="flow">
+      <div class="flow-node"><strong>Agent 1</strong>Recherche &amp; stratégie</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color:#f7e96e; background:#fffde8;"><strong>Revue croisée</strong>Agents 1 &amp; 2 s'échangent les retours</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><strong>Agent 2</strong>Analyse données</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color:var(--accent); background:var(--accent-soft);"><strong>Agent 3</strong>Présentation finale</div>
+    </div>
+
+    <h3 style="font-family:'DM Serif Display',serif; font-size:1.3rem; margin:32px 0 16px;">Le prompt d'orchestration</h3>
+
+    <div class="code-block">
+      <div class="code-label">Structure d'un prompt multi-agents</div>
+      <code><span class="cmd">Tu vas créer une Agent Team avec une liste de tâches
+partagées pour gérer ce projet.</span>
+
+<span class="comment"># 1. Définir les agents et leurs rôles</span>
+<span class="val">Mets en place 3 coéquipiers spécialisés :</span>
+- Agent Stratège : recherche et analyse de marché
+- Agent Analyste : performance des données de campagne
+- Agent Présentateur : synthèse en slides
+
+<span class="comment"># 2. Définir les dépendances et la revue croisée</span>
+<span class="val">Avant la finalisation :</span>
+- Agents 1 et 2 relisent mutuellement leurs livrables
+- Ils signalent les incohérences et divergences
+- Chacun révise son livrable avant de soumettre à l'Agent 3
+
+<span class="comment"># 3. Demander un plan avant exécution</span>
+<span class="val">Présente-moi le plan d'exécution avant de commencer.</span></code>
+    </div>
+
+    <div class="callout">
+      <div class="callout-label">Ce qui se passe concrètement</div>
+      <p>Les agents produisent des livrables V1, échangent des retours structurés (corrections, signalement d'incohérences), révisent leurs propres outputs, puis soumettent les livrables révisés au dernier agent qui synthétise. C'est un processus éditorial automatisé.</p>
+    </div>
+
+    <h3 style="font-family:'DM Serif Display',serif; font-size:1.3rem; margin:32px 0 16px;">Pourquoi demander un plan avant l'exécution</h3>
+
+    <div class="tips-grid">
+      <div class="tip-card">
+        <div class="tip-icon">🎯</div>
+        <strong>Valider l'interprétation</strong>
+        <p>Claude vous montre comment il a compris la tâche avant d'agir. Vous corrigez en amont plutôt qu'après coup.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">💰</div>
+        <strong>Économiser des tokens</strong>
+        <p>Une mauvaise interprétation coûte des centaines de tokens. Un plan en 100 tokens vaut mieux qu'un livrable à refaire.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">🔍</div>
+        <strong>Repérer les manques</strong>
+        <p>Le plan révèle les fichiers manquants, les ambiguïtés ou les périmètres mal définis avant que le travail ne commence.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 PLUGINS -->
+  <section class="section" id="plugins">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2 class="section-title">Packager en plugin réutilisable</h2>
+    </div>
+
+    <p>Une fois l'équipe d'agents construite, ses compétences peuvent être <span class="key">condensées dans un plugin portable</span>. Ce plugin peut être rechargé dans d'autres contextes, sur d'autres projets, avec d'autres données.</p>
+
+    <div class="code-block">
+      <div class="code-label">Créer le plugin</div>
+      <code><span class="cmd">Regroupe tous les skills du dossier skill/ dans un plugin
+appelé "AI-Marketing-Skills". Réfère-toi à la documentation
+officielle pour créer les skills dans le bon format.
+Mets à jour CLAUDE.md pour référencer ce plugin.</span></code>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <strong>Générer le plugin (fichier .zip)</strong>
+          <p>Claude regroupe tous les skills en un seul package avec un manifeste et une structure officielle.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <strong>L'importer dans Cowork</strong>
+          <p>Dans l'interface Cowork de Claude, section "Plugins", téléverser le fichier .zip. Le plugin apparaît et ses skills deviennent invocables.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <strong>Le réutiliser sur un nouveau projet</strong>
+          <p>Sélectionner les skills nécessaires et appliquer les mêmes compétences à de nouvelles données — sans reconfigurer les agents depuis zéro.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-label">Bénéfice principal</div>
+      <p>Les agents construits une fois deviennent des <strong>compétences portables</strong>. La mise en place initiale représente un investissement unique ; chaque réutilisation en amortit le coût — en temps et en tokens.</p>
+    </div>
+  </section>
+
+  <!-- 06 TOKENS -->
+  <section class="section" id="tokens">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2 class="section-title">Optimiser la gestion des tokens</h2>
+    </div>
+
+    <p>Tout ce qui précède n'est pas qu'une architecture d'agents : c'est une <span class="key">stratégie d'efficacité des tokens</span>. Voici les mécanismes en jeu, et comment les optimiser consciemment.</p>
+
+    <h3 style="font-family:'DM Serif Display',serif; font-size:1.3rem; margin:28px 0 16px;">Ce qui consomme des tokens</h3>
+
+    <table class="token-table">
+      <thead>
+        <tr>
+          <th>Source de consommation</th>
+          <th>Impact</th>
+          <th>Levier</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Répéter le contexte dans chaque prompt</td>
+          <td><span class="badge badge-red">Élevé</span></td>
+          <td>Centraliser dans CLAUDE.md</td>
+        </tr>
+        <tr>
+          <td>Prompts vagues forçant des clarifications</td>
+          <td><span class="badge badge-red">Élevé</span></td>
+          <td>Structurer les prompts avec des étapes</td>
+        </tr>
+        <tr>
+          <td>Livrables à refaire suite à une mauvaise interprétation</td>
+          <td><span class="badge badge-red">Élevé</span></td>
+          <td>Demander un plan avant exécution</td>
+        </tr>
+        <tr>
+          <td>Instructions redondantes entre agents</td>
+          <td><span class="badge badge-yellow">Moyen</span></td>
+          <td>Mutualiser dans les skills partagés</td>
+        </tr>
+        <tr>
+          <td>Longs historiques de conversation</td>
+          <td><span class="badge badge-yellow">Moyen</span></td>
+          <td>Démarrer de nouvelles sessions avec CLAUDE.md</td>
+        </tr>
+        <tr>
+          <td>Fichiers de contexte bien rédigés (coût initial)</td>
+          <td><span class="badge badge-green">Amorti</span></td>
+          <td>Investissement rentable sur la durée</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-family:'DM Serif Display',serif; font-size:1.3rem; margin:32px 0 16px;">Les 7 principes d'économie de tokens</h3>
+
+    <div class="tips-grid">
+      <div class="tip-card">
+        <div class="tip-icon">📄</div>
+        <strong>1. CLAUDE.md comme mémoire persistante</strong>
+        <p>Toute information qu'on répète souvent mérite d'être dans ce fichier. Une fois écrite, elle n'occupe plus de place dans vos prompts.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">🧩</div>
+        <strong>2. Skills au lieu de prompts longs</strong>
+        <p>Un skill stocke un processus complet. Au lieu de 200 tokens d'instructions, vous tapez <code>/nom-skill</code>.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">🗺️</div>
+        <strong>3. Plan avant exécution</strong>
+        <p>Toujours demander à Claude de présenter son plan avant d'agir sur une tâche complexe. Correction en amont = économie massive.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">📁</div>
+        <strong>4. Références de fichiers plutôt que copier-coller</strong>
+        <p>Pointer vers <code>data/rapport.xlsx</code> au lieu de coller son contenu dans le prompt. Claude lit directement le fichier.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">🔄</div>
+        <strong>5. Sessions fraîches pour les nouvelles tâches</strong>
+        <p>Un long historique de conversation pèse sur chaque requête. Démarrer une nouvelle session avec CLAUDE.md repart de zéro proprement.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">⚡</div>
+        <strong>6. Parallélisme d'agents</strong>
+        <p>Des agents qui travaillent en parallèle réduisent la longueur de la chaîne. Moins de tours de parole = moins de contexte accumulé.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">🏗️</div>
+        <strong>7. Investir dans la structure initiale</strong>
+        <p>Une heure passée à bien rédiger CLAUDE.md et les skills économise des dizaines d'itérations futures. Le coût initial est amorti rapidement.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-label">Synthèse</div>
+      <p>L'architecture agents n'est pas qu'une question de puissance de traitement : c'est une <strong>discipline d'ingénierie du contexte</strong>. Structurer l'information en amont, découper les responsabilités, éviter les répétitions — ces pratiques réduisent la consommation de tokens tout en augmentant la qualité des outputs.</p>
+    </div>
+  </section>
+
+  <!-- 07 RÉCAPITULATIF -->
+  <section class="section" id="recapitulatif">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <h2 class="section-title">Récapitulatif opérationnel</h2>
+    </div>
+
+    <p>Le chemin complet, de zéro à une équipe d'agents fonctionnelle :</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <strong>Créer l'arborescence</strong>
+          <p>Dossier racine + sous-dossiers <code>contexte/</code>, <code>pos/</code>, <code>exemples/</code>, <code>data/</code>, <code>résultats/</code>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <strong>Alimenter <code>contexte/</code></strong>
+          <p>Générer 3 à 4 fichiers .md décrivant votre domaine, vos processus, votre style. Les déposer dans ce dossier.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <strong>Initialiser CLAUDE.md</strong>
+          <p>Lancer <em>"Initialise un fichier CLAUDE.md pour ce projet"</em>. Claude lit tout et crée la mémoire persistante du projet.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <strong>Créer les skills / agents</strong>
+          <p>Pour chaque agent, fournir un POS ou un guide de processus et demander à Claude de le transformer en skill.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <strong>Tester chaque agent individuellement</strong>
+          <p>Invoquer avec <code>/nom-skill</code> et valider les outputs avant l'orchestration.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <strong>Orchestrer en équipe</strong>
+          <p>Utiliser un prompt d'orchestration multi-agents avec revue croisée, demander le plan avant exécution.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">7</div>
+        <div class="step-body">
+          <strong>Packager en plugin</strong>
+          <p>Consolider tous les skills dans un plugin .zip réutilisable sur d'autres projets et dans Cowork.</p>
+        </div>
+      </div>
+    </div>
+
+    <table class="token-table" style="margin-top:36px;">
+      <thead>
+        <tr>
+          <th>Composant</th>
+          <th>Rôle</th>
+          <th>Bénéfice tokens</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>CLAUDE.md</code></td>
+          <td>Mémoire persistante du projet</td>
+          <td><span class="badge badge-green">Élimine les répétitions</span></td>
+        </tr>
+        <tr>
+          <td>Fichiers <code>contexte/*.md</code></td>
+          <td>Base de connaissance partagée</td>
+          <td><span class="badge badge-green">Contexte lu une seule fois</span></td>
+        </tr>
+        <tr>
+          <td>Skills / agents</td>
+          <td>Processus encapsulés et invocables</td>
+          <td><span class="badge badge-green">Instructions comprimées</span></td>
+        </tr>
+        <tr>
+          <td>Orchestrateur + plan</td>
+          <td>Coordination et validation amont</td>
+          <td><span class="badge badge-green">Réduit les itérations</span></td>
+        </tr>
+        <tr>
+          <td>Plugin portable</td>
+          <td>Réutilisation multi-projets</td>
+          <td><span class="badge badge-green">Amortissement sur la durée</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+</main>
+
+<footer>
+  <p>Guide compilé à partir d'un cas pratique · <span>Claude Code</span> · Agents IA &amp; Optimisation des tokens</p>
+</footer>
+
+<button class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Retour en haut">↑</button>
+
+<script>
+  // Intersection Observer pour les animations d'entrée
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.section').forEach(s => observer.observe(s));
+
+  // Bouton retour en haut
+  const btn = document.querySelector('.back-top');
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('show', window.scrollY > 400);
+  });
+
+  // TOC : ouvert par défaut
+  document.querySelector('.toc-body').style.display = 'grid';
+</script>
+</body>
+</html>

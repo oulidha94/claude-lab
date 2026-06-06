@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Cowork — Guide de formation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0f11;
+    --surface: #161820;
+    --surface2: #1e2028;
+    --border: #2a2d38;
+    --accent: #d4845a;
+    --accent2: #e8b88a;
+    --accent-dim: rgba(212,132,90,0.12);
+    --text: #e8e6e0;
+    --text-muted: #8a8880;
+    --text-dim: #5a5856;
+    --green: #6abf8a;
+    --blue: #6fa8d6;
+    --yellow: #d4b85a;
+    --tag-bg: rgba(212,132,90,0.1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  html, body {
+    overflow-x: hidden;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* LAYOUT */
+  .layout {
+    display: block;
+    min-height: 100vh;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px;
+    height: 100vh;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+  }
+
+  .sidebar-header {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .logo-icon {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+
+  .logo-text {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+
+  .sidebar-meta {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .sidebar-nav {
+    padding: 16px 0;
+    flex: 1;
+  }
+
+  .nav-section-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    padding: 8px 24px 6px;
+    margin-top: 4px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 24px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 13.5px;
+    transition: all 0.2s;
+    cursor: pointer;
+    border-left: 2px solid transparent;
+  }
+
+  .nav-item:hover {
+    color: var(--text);
+    background: var(--accent-dim);
+    border-left-color: var(--accent);
+  }
+
+  .nav-item.active {
+    color: var(--accent2);
+    background: var(--accent-dim);
+    border-left-color: var(--accent);
+  }
+
+  .nav-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    min-width: 18px;
+  }
+
+  .sidebar-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .duration-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  /* MAIN CONTENT */
+  .main {
+    margin-left: 260px;
+    padding: 0;
+    min-width: 0;
+    max-width: calc(100vw - 260px);
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(160deg, #12141a 0%, #1a1620 50%, #12141a 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 56px 56px 48px;
+    position: relative;
+    overflow: clip;
+    overflow-clip-margin: 0;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px;
+    right: -80px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(212,132,90,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    border: 1px solid rgba(212,132,90,0.3);
+    color: var(--accent2);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 4px 12px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(28px, 3.5vw, 48px);
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    margin-bottom: 16px;
+    max-width: 640px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent2);
+  }
+
+  .hero-desc {
+    font-size: 15.5px;
+    color: var(--text-muted);
+    max-width: 520px;
+    line-height: 1.65;
+    margin-bottom: 32px;
+  }
+
+  .hero-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12.5px;
+    color: var(--text-muted);
+  }
+
+  .pill span { font-size: 14px; }
+
+  /* SECTION */
+  .section {
+    padding: 48px 56px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section:last-child { border-bottom: none; }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 36px;
+  }
+
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+    padding-top: 6px;
+    min-width: 24px;
+  }
+
+  .section-title-block h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .section-title-block p {
+    font-size: 13px;
+    color: var(--text-dim);
+    font-style: italic;
+    font-family: 'Fraunces', serif;
+  }
+
+  /* CARDS GRID */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 24px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .card:hover {
+    border-color: rgba(212,132,90,0.4);
+    transform: translateY(-2px);
+  }
+
+  .card-icon {
+    font-size: 24px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .card h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .card p {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* COMPARISON TABLE */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 16px;
+    font-size: 13.5px;
+  }
+
+  .compare-table th {
+    text-align: left;
+    padding: 10px 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .compare-table th:first-child { border-radius: 8px 0 0 0; }
+  .compare-table th:last-child { border-radius: 0 8px 0 0; }
+
+  .compare-table td {
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  .compare-table td:first-child {
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    width: 160px;
+  }
+
+  .compare-table tr:hover td {
+    background: var(--surface);
+  }
+
+  .yes { color: var(--green) !important; font-weight: 500; }
+  .no { color: var(--text-dim) !important; }
+  .partial { color: var(--yellow) !important; }
+
+  /* STEPS */
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+  }
+
+  .steps::before {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 32px;
+    bottom: 32px;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .step {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 16px 0;
+  }
+
+  .step-dot {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    flex-shrink: 0;
+    z-index: 1;
+    position: relative;
+  }
+
+  .step-content h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+    padding-top: 10px;
+  }
+
+  .step-content p {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* CALLOUT */
+  .callout {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 13.5px;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+
+  .callout strong {
+    color: var(--accent2);
+    display: block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .callout.tip { border-left-color: var(--green); }
+  .callout.tip strong { color: var(--green); }
+  .callout.warn { border-left-color: var(--yellow); }
+  .callout.warn strong { color: var(--yellow); }
+  .callout.info { border-left-color: var(--blue); }
+  .callout.info strong { color: var(--blue); }
+
+  /* TAG LIST */
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 12px 0;
+  }
+
+  .tag {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .tag.accent {
+    background: var(--accent-dim);
+    border-color: rgba(212,132,90,0.3);
+    color: var(--accent2);
+  }
+
+  /* CODE INLINE */
+  code {
+    font-family: 'DM Mono', monospace;
+    font-size: 12.5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--accent2);
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 24px 0;
+  }
+
+  /* QUIZ */
+  .quiz-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 24px;
+  }
+
+  .quiz-block h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    color: var(--text);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .quiz-item {
+    margin-bottom: 20px;
+  }
+
+  .quiz-item p {
+    font-size: 14px;
+    color: var(--text);
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+
+  .quiz-choices {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .quiz-choice {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13.5px;
+    color: var(--text-muted);
+    transition: all 0.15s;
+    user-select: none;
+  }
+
+  .quiz-choice:hover { border-color: rgba(212,132,90,0.4); color: var(--text); }
+  .quiz-choice.correct { border-color: var(--green); background: rgba(106,191,138,0.08); color: var(--green); }
+  .quiz-choice.wrong { border-color: #c46060; background: rgba(196,96,96,0.08); color: #c46060; }
+
+  .quiz-choice-mark {
+    width: 18px;
+    height: 18px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+  }
+
+  .quiz-feedback {
+    font-size: 12.5px;
+    margin-top: 8px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    display: none;
+  }
+
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.ok { background: rgba(106,191,138,0.08); color: var(--green); border: 1px solid rgba(106,191,138,0.2); }
+  .quiz-feedback.nok { background: rgba(196,96,96,0.08); color: #c46060; border: 1px solid rgba(196,96,96,0.2); }
+
+  /* PROGRESS BAR */
+  .progress-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 12px;
+    color: var(--text-dim);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .progress-bar {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-bottom: 40px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.6s ease;
+  }
+
+  /* ANCHOR OFFSET */
+  .anchor {
+    scroll-margin-top: 24px;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { position: static; width: 100%; height: auto; }
+    .main { margin-left: 0; }
+    .hero, .section { padding: 32px 24px; }
+    .hero h1 { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-mark">
+        <div class="logo-icon">⚙</div>
+        <span class="logo-text">Claude Cowork</span>
+      </div>
+      <div class="sidebar-meta">Guide de formation · 2025</div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Chapitres</div>
+      <a class="nav-item active" href="#intro" onclick="setActive(this)">
+        <span class="nav-num">01</span> Introduction
+      </a>
+      <a class="nav-item" href="#cas-usage" onclick="setActive(this)">
+        <span class="nav-num">02</span> Quand l'utiliser ?
+      </a>
+      <a class="nav-item" href="#bases" onclick="setActive(this)">
+        <span class="nav-num">03</span> Les bases
+      </a>
+      <a class="nav-item" href="#artifacts" onclick="setActive(this)">
+        <span class="nav-num">04</span> Les live artifacts
+      </a>
+      <a class="nav-item" href="#chrome" onclick="setActive(this)">
+        <span class="nav-num">05</span> Claude in Chrome
+      </a>
+      <div class="nav-section-label" style="margin-top:12px;">Ressources</div>
+      <a class="nav-item" href="#recap">
+        <span class="nav-num">→</span> Récapitulatif
+      </a>
+      <a class="nav-item" href="#quiz">
+        <span class="nav-num">→</span> Auto-évaluation
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="duration-badge">
+        <span>⏱</span> Durée estimée : 25 min
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- HERO -->
+    <div class="hero" id="intro">
+      <div class="hero-tag">Formation · Claude Cowork</div>
+      <h1>De débutant à tes premiers <em>agents automatisés</em></h1>
+      <p class="hero-desc">Un guide pratique pour passer de Claude en mode chat à une utilisation en agents autonomes, tâches récurrentes et dashboards vivants, sans écrire une ligne de code.</p>
+      <div class="hero-pills">
+        <div class="pill"><span>🤖</span> Agents IA</div>
+        <div class="pill"><span>⚙</span> Automatisation</div>
+        <div class="pill"><span>📊</span> Dashboards live</div>
+        <div class="pill"><span>🔗</span> Connecteurs</div>
+        <div class="pill"><span>🗂</span> Mémoire de projet</div>
+      </div>
+    </div>
+
+    <!-- CHAPITRE 1 : INTRO -->
+    <section class="section anchor" id="intro-section">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <div class="section-title-block">
+          <h2>Introduction</h2>
+          <p>Pourquoi changer d'outil ?</p>
+        </div>
+      </div>
+
+      <p style="color:var(--text-muted);margin-bottom:20px;">Claude Cowork est le <strong style="color:var(--text)">parfait entre-deux</strong> entre Claude en mode chat (usage conversationnel) et Claude Code (environnement développeur). Il s'adresse aux professionnels qui veulent automatiser des tâches récurrentes sans entrer dans le développement logiciel.</p>
+
+      <div class="cards-grid">
+        <div class="card">
+          <span class="card-icon">💬</span>
+          <h3>Claude Chat</h3>
+          <p>Usage conversationnel. Idéal pour des questions ponctuelles et des tâches uniques, sans mémoire persistante ni automatisation.</p>
+        </div>
+        <div class="card" style="border-color:rgba(212,132,90,0.4);">
+          <span class="card-icon">⚙</span>
+          <h3>Claude Cowork <span class="tag accent" style="font-size:10px;padding:2px 7px;vertical-align:middle;">recommandé</span></h3>
+          <p>Pour les tâches récurrentes, les projets avec mémoire, les fichiers locaux et les agents semi-automatisés. L'idéal pour débuter.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">👨‍💻</span>
+          <h3>Claude Code</h3>
+          <p>Environnement développeur complet. Agit comme un développeur à part entière. Recommandé pour les profils techniques.</p>
+        </div>
+      </div>
+
+      <div class="callout tip">
+        <strong>Objectif de ce guide</strong>
+        À l'issue de cette session, vous serez capable de configurer un projet Cowork, lancer des tâches programmées, connecter vos outils métier, créer un live artifact et utiliser Claude depuis votre navigateur.
+      </div>
+    </section>
+
+    <!-- CHAPITRE 2 : CAS D'USAGE -->
+    <section class="section anchor" id="cas-usage">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <div class="section-title-block">
+          <h2>Dans quel cas l'utiliser ?</h2>
+          <p>Prérequis et critères de passage</p>
+        </div>
+      </div>
+
+      <h3 style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:16px;">Prérequis techniques</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-dot">1</div>
+          <div class="step-content">
+            <h4>Télécharger l'application desktop Claude</h4>
+            <p>Disponible sur Mac et PC depuis le site officiel de Claude (claude.ai). L'application desktop est indispensable ; la version web ne suffit pas.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-dot">2</div>
+          <div class="step-content">
+            <h4>Disposer d'un abonnement payant</h4>
+            <p>La version <strong style="color:var(--accent2)">Pro à 17 $/mois</strong> est suffisante pour démarrer avec Cowork et lancer des agents basiques. L'abonnement supérieur (~100 $/mois) n'est utile que pour du développement applicatif intensif.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-dot">3</div>
+          <div class="step-content">
+            <h4>Accéder à la section "Cowork"</h4>
+            <p>Une fois l'application installée, l'interface Cowork est accessible via le menu en haut de l'application. L'interface change visuellement dès l'activation.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h3 style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:16px;">Signaux de passage de Chat à Cowork</h3>
+
+      <div class="cards-grid">
+        <div class="card">
+          <span class="card-icon">🔁</span>
+          <h3>Tâches récurrentes</h3>
+          <p>Vous posez les mêmes questions à Claude chaque semaine : analyse de pipeline, rapport hebdomadaire, veille, etc.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">🧠</span>
+          <h3>Contexte projet complexe</h3>
+          <p>Votre projet nécessite que Claude retienne un contexte important d'une session à l'autre sans que vous le répétiez.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">📁</span>
+          <h3>Fichiers locaux</h3>
+          <p>Vous avez besoin que Claude lise et écrive directement dans des dossiers de votre PC plutôt que via des pièces jointes.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">🌐</span>
+          <h3>Navigation web autonome</h3>
+          <p>Vous souhaitez que Claude navigue lui-même sur le web pour récupérer des informations en temps réel.</p>
+        </div>
+      </div>
+
+      <div class="callout warn">
+        <strong>Bonne pratique</strong>
+        Commencez par <em>une seule tâche récurrente</em> pour prendre en main Cowork, avant de construire des workflows plus complexes. La maîtrise du paramétrage d'un projet est le prérequis de tout le reste.
+      </div>
+    </section>
+
+    <!-- CHAPITRE 3 : LES BASES -->
+    <section class="section anchor" id="bases">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <div class="section-title-block">
+          <h2>Les bases</h2>
+          <p>Projets, mémoire, tâches programmées, skills et connecteurs</p>
+        </div>
+      </div>
+
+      <!-- Projets -->
+      <h3 style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:12px;font-family:'Fraunces',serif;">3.1 Travailler en projet</h3>
+      <p style="color:var(--text-muted);margin-bottom:20px;">Un <strong style="color:var(--text)">projet Cowork</strong> est un espace de travail associé à un dossier local sur votre PC. Il contient les instructions permanentes de Claude, les fichiers de référence, la mémoire accumulée et les tâches programmées.</p>
+
+      <div class="cards-grid" style="margin-bottom:24px;">
+        <div class="card">
+          <span class="card-icon">📂</span>
+          <h3>Dossier local lié</h3>
+          <p>Claude peut lire le contenu du dossier, y écrire des résultats et y stocker sa mémoire de projet pour les itérations futures.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">📋</span>
+          <h3>Instructions permanentes</h3>
+          <p>Rédigées une fois, disponibles à chaque exécution. Plus besoin de ré-expliquer le contexte à chaque nouvelle conversation.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">🗄</span>
+          <h3>Mémoire partagée</h3>
+          <p>La mémoire est partagée entre toutes les discussions d'un même projet, mais <em>non transférable</em> d'un projet à l'autre.</p>
+        </div>
+      </div>
+
+      <div class="callout info">
+        <strong>Exemple d'instructions de projet</strong>
+        "Analyse mon pipeline commercial sur HubSpot. Regarde les deals gagnés, perdus et les deals ouverts à fort potentiel de closing. Génère un rapport hebdomadaire et envoie-le sur Slack."
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Modèles et effort -->
+      <h3 style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:12px;font-family:'Fraunces',serif;">3.2 Choix du modèle et niveau d'effort</h3>
+
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Modèle</th>
+            <th>Usage recommandé</th>
+            <th>Consommation tokens</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>claude-opus-4-8</code></td>
+            <td>Raisonnement complexe, analyse approfondie</td>
+            <td><span class="partial">Elevée — à doser</span></td>
+          </tr>
+          <tr>
+            <td><code>claude-sonnet-4-6</code></td>
+            <td>Tâches courantes, tâches programmées récurrentes</td>
+            <td><span class="yes">Modérée — recommandé</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout warn">
+        <strong>Attention à la consommation de tokens</strong>
+        Le niveau d'effort "max" pousse le modèle à sa pleine capacité de réflexion mais multiplie la consommation de tokens. Pour une recherche simple (météo, actualités), l'effort minimal suffit. Réservez le niveau élevé aux problèmes complexes.
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Tâches programmées -->
+      <h3 style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:12px;font-family:'Fraunces',serif;">3.3 Programmer une tâche récurrente</h3>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-dot">1</div>
+          <div class="step-content">
+            <h4>Ouvrir la section "Schedule"</h4>
+            <p>Depuis l'interface du projet, cliquer sur <code>+</code> dans la section "Programmé" pour créer une nouvelle tâche.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-dot">2</div>
+          <div class="step-content">
+            <h4>Nommer et décrire la tâche</h4>
+            <p>Donner un nom explicite (ex. : "Hebdomadaire — Pipeline HubSpot") et décrire précisément l'action à exécuter. Cette description est le prompt d'exécution automatique.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-dot">3</div>
+          <div class="step-content">
+            <h4>Choisir le modèle et la fréquence</h4>
+            <p>Sélectionner le modèle (Sonnet suffit pour la plupart des tâches récurrentes) et définir la fréquence : quotidienne, hebdomadaire, à une heure précise. Exemple : tous les lundis à 9h.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-dot">4</div>
+          <div class="step-content">
+            <h4>Activer les connecteurs nécessaires</h4>
+            <p>Si la tâche doit lire HubSpot et envoyer sur Slack, ces deux connecteurs doivent être configurés et autorisés au préalable.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Connecteurs -->
+      <h3 style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:12px;font-family:'Fraunces',serif;">3.4 Connecteurs</h3>
+      <p style="color:var(--text-muted);margin-bottom:16px;">Les connecteurs se configurent dans <code>Settings → Customize → Connecteurs</code>. Chaque connecteur expose des permissions granulaires que vous pouvez autoriser, bloquer ou soumettre à validation manuelle.</p>
+
+      <div class="tag-list">
+        <span class="tag accent">HubSpot / Salesforce</span>
+        <span class="tag accent">Slack</span>
+        <span class="tag">Notion</span>
+        <span class="tag">Figma</span>
+        <span class="tag">Miro</span>
+        <span class="tag">Linear</span>
+        <span class="tag">Semrush (SEO)</span>
+        <span class="tag">Google Sheets</span>
+        <span class="tag">+ de 30 autres...</span>
+      </div>
+
+      <div class="callout warn">
+        <strong>Sécurité des permissions</strong>
+        Par défaut, préférez la validation manuelle ("Toujours demander approbation") pour chaque permission, surtout en phase d'apprentissage. L'option "Toujours autoriser" est pratique mais réduit votre visibilité sur les actions effectuées par Claude.
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Skills -->
+      <h3 style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:12px;font-family:'Fraunces',serif;">3.5 Skills et Plugins</h3>
+
+      <div class="cards-grid">
+        <div class="card">
+          <span class="card-icon">📄</span>
+          <h3>Skills (compétences)</h3>
+          <p>Fichiers Markdown (<code>.md</code>) qui décrivent une méthodologie ou un ensemble de bonnes pratiques. Claude les consulte automatiquement selon le contexte. Structure : un fichier <code>skill.md</code> (sommaire) + des fichiers thématiques.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">🔌</span>
+          <h3>Plugins</h3>
+          <p>Bundles développés par Anthropic et ses partenaires. Combinent un connecteur et un skill préconfiguré. Exemple : le plugin Figma inclut la connexion à l'API et les bonnes pratiques d'utilisation.</p>
+        </div>
+      </div>
+
+      <div class="callout tip">
+        <strong>Analogie pédagogique</strong>
+        Un <em>skill</em>, c'est un cours condensé que Claude peut consulter quand il en a besoin. Il lit la description du skill pour décider s'il est pertinent, puis plonge dans le contenu si nécessaire. Vous pouvez par exemple créer un skill "Expert CRM" ou "Directeur commercial" pour affiner la qualité des analyses.
+      </div>
+    </section>
+
+    <!-- CHAPITRE 4 : LIVE ARTIFACTS -->
+    <section class="section anchor" id="artifacts">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <div class="section-title-block">
+          <h2>Les live artifacts</h2>
+          <p>Dashboards interactifs persistants</p>
+        </div>
+      </div>
+
+      <p style="color:var(--text-muted);margin-bottom:24px;">Un <strong style="color:var(--text)">live artifact</strong> est une page HTML interactive, générée par Claude, qui persiste sur votre PC même après la fermeture de la session Cowork. Il se met à jour à la demande depuis les données sources (CRM, email, agenda...).</p>
+
+      <div class="cards-grid" style="margin-bottom:24px;">
+        <div class="card">
+          <span class="card-icon">📊</span>
+          <h3>Dashboard pipeline commercial</h3>
+          <p>Affiche le nombre de deals, le win rate, l'open pipeline, les deals à clore prochainement. Chaque deal peut être un lien direct vers votre CRM.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">📧</span>
+          <h3>Suivi des emails en attente</h3>
+          <p>Liste des messages sans réponse, triés par priorité ou ancienneté, connecté à votre messagerie.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">✈</span>
+          <h3>Planificateur de voyage</h3>
+          <p>Comparatif de vols, hôtels et activités avec les prix en temps réel, exportable en Google Sheets ou Excel.</p>
+        </div>
+      </div>
+
+      <h3 style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:16px;">Créer un live artifact : étapes clés</h3>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-dot">1</div>
+          <div class="step-content">
+            <h4>Choisir le connecteur de données</h4>
+            <p>Depuis l'interface Artifact, sélectionner la source (HubSpot pour le pipeline CRM, Gmail pour les emails, etc.).</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-dot">2</div>
+          <div class="step-content">
+            <h4>Définir les métriques à afficher</h4>
+            <p>Préciser à Claude les indicateurs souhaités. Plus la demande est précise, meilleur sera le résultat.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-dot">3</div>
+          <div class="step-content">
+            <h4>Demander la construction du dashboard</h4>
+            <p>Exemple : <em>"Build everything in a single dashboard"</em>. Claude génère la page HTML avec toutes les données intégrées.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-dot">4</div>
+          <div class="step-content">
+            <h4>Épingler et rafraîchir</h4>
+            <p>L'artifact s'épingle dans l'interface pour un accès rapide. Le bouton "Reload" met à jour les données depuis la source en un clic.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout tip">
+        <strong>Bon à savoir</strong>
+        Vous pouvez continuer à discuter avec Claude directement depuis l'artifact ouvert pour l'améliorer, ajouter des sections ou modifier les visuels, sans repartir de zéro.
+      </div>
+    </section>
+
+    <!-- CHAPITRE 5 : CLAUDE IN CHROME -->
+    <section class="section anchor" id="chrome">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <div class="section-title-block">
+          <h2>Claude in Chrome</h2>
+          <p>Navigation autonome et travail à distance</p>
+        </div>
+      </div>
+
+      <p style="color:var(--text-muted);margin-bottom:24px;">L'extension <strong style="color:var(--text)">Claude in Chrome</strong> permet à Claude de naviguer sur le web de façon autonome, ouvrir des onglets, lire des pages et extraire des données en temps réel — avec votre validation.</p>
+
+      <h3 style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:16px;">Installation</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-dot">1</div>
+          <div class="step-content">
+            <h4>Activer dans les paramètres</h4>
+            <p>Dans l'application desktop : <code>Settings → Claude in Chrome Settings → Autoriser l'extension</code>.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-dot">2</div>
+          <div class="step-content">
+            <h4>Installer depuis le Chrome Web Store</h4>
+            <p>Rechercher "Claude" dans le Chrome Web Store, installer l'extension officielle. Elle apparaît ensuite dans la barre d'outils du navigateur.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-dot">3</div>
+          <div class="step-content">
+            <h4>Autoriser les actions au premier lancement</h4>
+            <p>Lors de la première navigation automatique, Chrome demandera une validation. Cliquer "Autoriser" pour que Claude puisse opérer sur les onglets.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h3 style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:16px;">Cas d'usage illustré : préparer un voyage au Japon</h3>
+      <div class="callout info">
+        <strong>Instructions données à Claude</strong>
+        "Pour les billets d'avion, utilise Kayak.com. Pour les hôtels, regarde Booking.com. Pour les activités, choisis les sources les plus pertinentes. Génère un fichier comparatif avec les prix pour chaque option. Pose-moi les questions nécessaires avant de commencer."
+      </div>
+
+      <p style="color:var(--text-muted);margin:16px 0;">Claude ouvre automatiquement les onglets Kayak et Booking, navigue sur les pages de résultats selon les dates et critères fournis, extrait les données et génère un comparatif structuré avec totaux par catégorie et budget global estimé.</p>
+
+      <div class="callout warn">
+        <strong>Point de vigilance : prompt injection</strong>
+        Lorsque Claude navigue sur le web de façon autonome, il peut tomber sur des pages contenant des instructions malveillantes cachées (prompt injection). Restez attentif aux permissions demandées lors de sessions de navigation automatique.
+      </div>
+
+      <div class="divider"></div>
+
+      <h3 style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:16px;">Travail à distance via Dispatch</h3>
+      <p style="color:var(--text-muted);margin-bottom:16px;">La fonctionnalité <strong style="color:var(--text)">Dispatch</strong> permet de piloter votre session Cowork depuis votre téléphone, tant que votre PC est allumé. Cela transforme votre ordinateur en un agent toujours disponible, operable depuis n'importe où.</p>
+
+      <div class="cards-grid">
+        <div class="card">
+          <span class="card-icon">📱</span>
+          <h3>Connexion téléphone</h3>
+          <p>Ouvrir l'application Claude sur mobile, scanner le QR code depuis <code>Dispatch</code> dans l'interface desktop. La connexion est instantanée.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">💻</span>
+          <h3>PC comme serveur d'agent</h3>
+          <p>Votre ordinateur allumé devient un poste de travail distant. Claude peut continuer à naviguer, analyser et produire des résultats pendant que vous êtes en déplacement.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- RECAP -->
+    <section class="section anchor" id="recap">
+      <div class="section-header">
+        <span class="section-num">→</span>
+        <div class="section-title-block">
+          <h2>Récapitulatif</h2>
+          <p>Ce qu'il faut retenir</p>
+        </div>
+      </div>
+
+      <div class="cards-grid">
+        <div class="card">
+          <span class="card-icon">🧩</span>
+          <h3>Commencez par un projet ciblé</h3>
+          <p>Choisissez une tâche récurrente précise et construisez un projet Cowork autour d'elle. Un projet CRM, un projet veille, un projet rapport hebdomadaire.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">📝</span>
+          <h3>Investissez dans les instructions</h3>
+          <p>Plus vous détaillez le contexte, les outils à utiliser et le format de sortie attendu, plus les résultats seront précis. Traitez Claude comme un nouveau collaborateur.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">🧠</span>
+          <h3>Alimentez la mémoire</h3>
+          <p>Notez ce qui fonctionne, ce qui ne fonctionne pas. La mémoire est partagée dans un projet, mais pas entre projets. Un projet = une expertise.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">⚙</span>
+          <h3>Utilisez les skills</h3>
+          <p>Créez des fichiers Markdown décrivant les méthodes que Claude doit appliquer. Un skill "Expert CRM" ou "Analyste commercial" améliore sensiblement la qualité des sorties.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">🔒</span>
+          <h3>Gérez les permissions finement</h3>
+          <p>Ne donnez pas "Toujours autoriser" par défaut. Préférez la validation manuelle au départ, puis assouplez selon la confiance acquise dans chaque flux.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">🚀</span>
+          <h3>Itérez et progresso</h3>
+          <p>Cowork est un point d'entrée dans l'automatisation. Une fois à l'aise avec les projets et les agents, Claude Code devient la prochaine étape naturelle.</p>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-top:8px;">
+        <strong>Métaphore clé</strong>
+        Claude Cowork fonctionne comme un stagiaire intelligent à qui vous confiez des missions. Plus vous lui donnez de contexte, de méthodes de travail et de retours d'expérience, plus ses livraisons s'améliorent. La qualité de votre brief détermine la qualité de l'output.
+      </div>
+    </section>
+
+    <!-- QUIZ -->
+    <section class="section anchor" id="quiz">
+      <div class="section-header">
+        <span class="section-num">→</span>
+        <div class="section-title-block">
+          <h2>Auto-évaluation</h2>
+          <p>Vérifiez votre compréhension</p>
+        </div>
+      </div>
+
+      <div class="quiz-block">
+        <h3>Quiz — Claude Cowork : les fondamentaux</h3>
+
+        <div class="quiz-item" id="q1">
+          <p>1. Quelle condition technique est indispensable pour utiliser Claude Cowork ?</p>
+          <div class="quiz-choices">
+            <div class="quiz-choice" onclick="answer(this,'q1',false)">
+              <div class="quiz-choice-mark"></div>
+              Avoir la version gratuite de Claude et un navigateur Chrome
+            </div>
+            <div class="quiz-choice" onclick="answer(this,'q1',true)">
+              <div class="quiz-choice-mark"></div>
+              Télécharger l'application desktop Claude et disposer d'un abonnement payant
+            </div>
+            <div class="quiz-choice" onclick="answer(this,'q1',false)">
+              <div class="quiz-choice-mark"></div>
+              Avoir Claude Code installé au préalable
+            </div>
+          </div>
+          <div class="quiz-feedback" id="fb-q1"></div>
+        </div>
+
+        <div class="quiz-item" id="q2">
+          <p>2. Quelle est la principale différence entre la mémoire d'un projet Cowork et la mémoire de Claude Chat ?</p>
+          <div class="quiz-choices">
+            <div class="quiz-choice" onclick="answer(this,'q2',false)">
+              <div class="quiz-choice-mark"></div>
+              La mémoire de Chat est plus puissante car elle est partagée entre tous les projets
+            </div>
+            <div class="quiz-choice" onclick="answer(this,'q2',false)">
+              <div class="quiz-choice-mark"></div>
+              Il n'y a aucune différence, les deux systèmes fonctionnent de la même façon
+            </div>
+            <div class="quiz-choice" onclick="answer(this,'q2',true)">
+              <div class="quiz-choice-mark"></div>
+              La mémoire Cowork est persistante et partagée dans un projet, stockée dans un dossier local, non transférable entre projets
+            </div>
+          </div>
+          <div class="quiz-feedback" id="fb-q2"></div>
+        </div>
+
+        <div class="quiz-item" id="q3">
+          <p>3. Qu'est-ce qu'un <em>skill</em> dans Claude Cowork ?</p>
+          <div class="quiz-choices">
+            <div class="quiz-choice" onclick="answer(this,'q3',false)">
+              <div class="quiz-choice-mark"></div>
+              Un plugin payant développé par Anthropic pour connecter des outils tiers
+            </div>
+            <div class="quiz-choice" onclick="answer(this,'q3',true)">
+              <div class="quiz-choice-mark"></div>
+              Un fichier Markdown décrivant une méthodologie que Claude consulte selon le contexte
+            </div>
+            <div class="quiz-choice" onclick="answer(this,'q3',false)">
+              <div class="quiz-choice-mark"></div>
+              Un script Python exécuté automatiquement à chaque tâche planifiée
+            </div>
+          </div>
+          <div class="quiz-feedback" id="fb-q3"></div>
+        </div>
+
+        <div class="quiz-item" id="q4">
+          <p>4. Quel risque de sécurité est spécifiquement mentionné pour Claude in Chrome ?</p>
+          <div class="quiz-choices">
+            <div class="quiz-choice" onclick="answer(this,'q4',false)">
+              <div class="quiz-choice-mark"></div>
+              Le vol de mots de passe stockés dans Chrome
+            </div>
+            <div class="quiz-choice" onclick="answer(this,'q4',false)">
+              <div class="quiz-choice-mark"></div>
+              L'installation de logiciels malveillants sur le PC
+            </div>
+            <div class="quiz-choice" onclick="answer(this,'q4',true)">
+              <div class="quiz-choice-mark"></div>
+              Le prompt injection : des pages web contenant des instructions malveillantes que Claude pourrait exécuter involontairement
+            </div>
+          </div>
+          <div class="quiz-feedback" id="fb-q4"></div>
+        </div>
+
+        <div class="quiz-item" id="q5">
+          <p>5. Qu'est-ce qu'un <em>live artifact</em> dans Cowork ?</p>
+          <div class="quiz-choices">
+            <div class="quiz-choice" onclick="answer(this,'q5',false)">
+              <div class="quiz-choice-mark"></div>
+              Un fichier Excel généré automatiquement à chaque exécution de tâche
+            </div>
+            <div class="quiz-choice" onclick="answer(this,'q5',true)">
+              <div class="quiz-choice-mark"></div>
+              Une page HTML interactive persistante sur le PC, connectée à des données en temps réel, qui survit à la fermeture de la session
+            </div>
+            <div class="quiz-choice" onclick="answer(this,'q5',false)">
+              <div class="quiz-choice-mark"></div>
+              Un rapport PDF généré depuis HubSpot et envoyé par Slack
+            </div>
+          </div>
+          <div class="quiz-feedback" id="fb-q5"></div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  // Navigation active
+  function setActive(el) {
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // Observer pour navigation active au scroll
+  const sections = document.querySelectorAll('.anchor');
+  const navItems = document.querySelectorAll('.nav-item[href^="#"]');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navItems.forEach(item => {
+          item.classList.remove('active');
+          const href = item.getAttribute('href');
+          if (href === '#' + id ||
+              (id === 'intro' && href === '#intro') ||
+              (id === 'cas-usage' && href === '#cas-usage') ||
+              (id === 'bases' && href === '#bases') ||
+              (id === 'artifacts' && href === '#artifacts') ||
+              (id === 'chrome' && href === '#chrome')) {
+            item.classList.add('active');
+          }
+        });
+      }
+    });
+  }, { rootMargin: '-20% 0px -60% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+
+  // Quiz
+  const answers = {
+    q1: 'Télécharger l\'application desktop Claude et disposer d\'un abonnement payant',
+    q2: 'La mémoire Cowork est persistante et partagée dans un projet, stockée dans un dossier local, non transférable entre projets',
+    q3: 'Un fichier Markdown décrivant une méthodologie que Claude consulte selon le contexte',
+    q4: 'Le prompt injection : des pages web contenant des instructions malveillantes que Claude pourrait exécuter involontairement',
+    q5: 'Une page HTML interactive persistante sur le PC, connectée à des données en temps réel, qui survit à la fermeture de la session'
+  };
+
+  const feedbacks = {
+    q1: { ok: 'Correct. L\'application desktop et un abonnement payant (Pro à 17 $/mois minimum) sont les deux prérequis obligatoires.', nok: 'Incorrect. Claude Cowork nécessite l\'application desktop (Mac ou PC) et un abonnement payant — la version gratuite ne donne pas accès à Cowork.' },
+    q2: { ok: 'Correct. La mémoire d\'un projet Cowork est stockée localement, partagée entre toutes les conversations de ce projet, mais isolée des autres projets.', nok: 'Incorrect. La mémoire Cowork est persistante et locale (stockée dans le dossier du projet), contrairement à la mémoire éphémère de Claude Chat.' },
+    q3: { ok: 'Correct. Un skill est un fichier Markdown structuré (skill.md + fichiers thématiques) que Claude consulte automatiquement quand il juge le contenu pertinent.', nok: 'Incorrect. Un skill est un fichier Markdown décrivant une méthode ou un ensemble de bonnes pratiques — créé par vous, pas par Anthropic, et gratuit.' },
+    q4: { ok: 'Correct. Le prompt injection est le principal risque : une page web peut contenir du texte conçu pour manipuler Claude lors de sa navigation autonome.', nok: 'Incorrect. Le risque identifié est le prompt injection : des instructions malveillantes dissimulées dans des pages web que Claude navigue automatiquement.' },
+    q5: { ok: 'Correct. Un live artifact est une page HTML générée par Claude, connectée à vos sources de données, qui reste accessible après fermeture de la session.', nok: 'Incorrect. Un live artifact est une page HTML interactive et persistante sur votre PC, pouvant afficher des données en temps réel depuis vos outils connectés.' }
+  };
+
+  const answered = {};
+
+  function answer(el, qid, isCorrect) {
+    if (answered[qid]) return;
+    answered[qid] = true;
+
+    const choices = document.querySelectorAll('#' + qid + ' .quiz-choice');
+    choices.forEach(c => {
+      c.style.pointerEvents = 'none';
+      if (c.textContent.trim() === answers[qid].trim()) {
+        c.classList.add('correct');
+        c.querySelector('.quiz-choice-mark').textContent = '✓';
+      }
+    });
+
+    if (!isCorrect) {
+      el.classList.add('wrong');
+      el.querySelector('.quiz-choice-mark').textContent = '✗';
+    }
+
+    const fb = document.getElementById('fb-' + qid);
+    fb.textContent = isCorrect ? '✓ ' + feedbacks[qid].ok : '✗ ' + feedbacks[qid].nok;
+    fb.className = 'quiz-feedback show ' + (isCorrect ? 'ok' : 'nok');
+  }
+</script>
+
+</body>
+</html>

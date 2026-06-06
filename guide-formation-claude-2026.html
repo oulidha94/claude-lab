@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guide Complet Claude 2026 — Formation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink:       #0f0f0f;
+      --paper:     #f5f0e8;
+      --cream:     #ede8dc;
+      --accent:    #c8430a;
+      --accent2:   #1a4f6e;
+      --muted:     #6b6255;
+      --tag-bg:    #e8e0d0;
+      --border:    #c5bfb0;
+      --code-bg:   #1a1a1a;
+      --code-text: #e8d5a3;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 400;
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    /* ─── PROGRESS BAR ─── */
+    #progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      width: 0%;
+      background: var(--accent);
+      z-index: 9999;
+      transition: width 0.1s linear;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 3px; left: 0; right: 0;
+      background: rgba(245,240,232,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      z-index: 900;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+    .nav-brand {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+    }
+    .nav-brand span { color: var(--ink); }
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ─── LAYOUT ─── */
+    .page-wrapper {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: 100vh;
+      padding-top: 59px;
+    }
+
+    /* ─── SIDEBAR ─── */
+    aside {
+      position: sticky;
+      top: 59px;
+      height: calc(100vh - 59px);
+      overflow-y: auto;
+      border-right: 1px solid var(--border);
+      background: var(--cream);
+      padding: 2rem 0;
+    }
+    aside::-webkit-scrollbar { width: 4px; }
+    aside::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .sidebar-section-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 1.2rem 1.5rem 0.4rem;
+    }
+    .sidebar-link {
+      display: block;
+      padding: 0.4rem 1.5rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-decoration: none;
+      border-left: 2px solid transparent;
+      transition: all 0.2s;
+      line-height: 1.4;
+    }
+    .sidebar-link:hover,
+    .sidebar-link.active {
+      color: var(--accent);
+      border-left-color: var(--accent);
+      background: rgba(200,67,10,0.05);
+    }
+    .sidebar-link.level2 { padding-left: 2.4rem; font-size: 0.78rem; }
+
+    /* ─── MAIN CONTENT ─── */
+    main {
+      max-width: 820px;
+      padding: 3rem 3.5rem 6rem;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      padding: 3.5rem 0 2rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 3rem;
+    }
+    .hero-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 3.2rem;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      margin-bottom: 0.8rem;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 540px;
+      margin-bottom: 2rem;
+    }
+    .hero-meta {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    .meta-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .meta-value {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--ink);
+    }
+
+    /* ─── SECTIONS ─── */
+    .section {
+      margin-bottom: 4rem;
+    }
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      flex-shrink: 0;
+    }
+    .section h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.7rem;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+    .section h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.2rem;
+      color: var(--ink);
+      margin: 2rem 0 0.75rem;
+      letter-spacing: -0.01em;
+    }
+    .section p {
+      margin-bottom: 1rem;
+      color: #2a2520;
+    }
+
+    /* ─── CALLOUTS ─── */
+    .callout {
+      border-left: 3px solid var(--border);
+      padding: 1rem 1.25rem;
+      margin: 1.5rem 0;
+      background: var(--cream);
+      border-radius: 0 4px 4px 0;
+    }
+    .callout.tip { border-left-color: #1a8a4a; }
+    .callout.warning { border-left-color: #c8a20a; }
+    .callout.key { border-left-color: var(--accent); }
+    .callout.info { border-left-color: var(--accent2); }
+    .callout-title {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+    .callout.tip .callout-title { color: #1a8a4a; }
+    .callout.warning .callout-title { color: #c8a20a; }
+    .callout.key .callout-title { color: var(--accent); }
+    .callout.info .callout-title { color: var(--accent2); }
+    .callout p { margin: 0; font-size: 0.93rem; }
+
+    /* ─── STEPS ─── */
+    .steps {
+      counter-reset: step-counter;
+      margin: 1.5rem 0;
+    }
+    .step {
+      display: grid;
+      grid-template-columns: 2.5rem 1fr;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+      counter-increment: step-counter;
+    }
+    .step-num {
+      width: 2.5rem;
+      height: 2.5rem;
+      background: var(--ink);
+      color: var(--paper);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.8rem;
+      flex-shrink: 0;
+      border-radius: 2px;
+    }
+    .step-content {
+      padding-top: 0.5rem;
+    }
+    .step-content strong {
+      display: block;
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+    }
+    .step-content p { margin: 0; font-size: 0.92rem; color: var(--muted); }
+
+    /* ─── CODE ─── */
+    .code-block {
+      background: var(--code-bg);
+      border-radius: 4px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.2rem 0;
+      overflow-x: auto;
+    }
+    .code-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #666;
+      margin-bottom: 0.5rem;
+    }
+    .code-block code {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.88rem;
+      color: var(--code-text);
+      line-height: 1.6;
+    }
+    .code-block .hl { color: #f4a261; }
+    .code-block .dim { color: #666; }
+    code {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.85em;
+      background: var(--tag-bg);
+      padding: 0.1em 0.35em;
+      border-radius: 2px;
+      color: var(--accent);
+    }
+
+    /* ─── TABLE ─── */
+    .table-wrapper { overflow-x: auto; margin: 1.5rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    thead th {
+      background: var(--ink);
+      color: var(--paper);
+      text-align: left;
+      padding: 0.7rem 1rem;
+      font-weight: 500;
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    tbody td {
+      padding: 0.7rem 1rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    tbody tr:hover { background: var(--cream); }
+
+    /* ─── TAGS ─── */
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+    .tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      background: var(--tag-bg);
+      border: 1px solid var(--border);
+      padding: 0.2rem 0.6rem;
+      border-radius: 2px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+    .tag.accent {
+      background: rgba(200,67,10,0.1);
+      border-color: rgba(200,67,10,0.3);
+      color: var(--accent);
+    }
+
+    /* ─── FORMULA BLOCK ─── */
+    .formula {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 1.5rem 2rem;
+      margin: 1.5rem 0;
+      border-radius: 4px;
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem;
+      letter-spacing: -0.01em;
+      text-align: center;
+      line-height: 1.8;
+    }
+    .formula span { color: var(--code-text); }
+    .formula .arrow { color: var(--accent); margin: 0 0.5rem; }
+
+    /* ─── GRID CARDS ─── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    .card {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      padding: 1.25rem;
+      border-radius: 4px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .card:hover {
+      border-color: var(--accent);
+      box-shadow: 3px 3px 0 var(--accent);
+    }
+    .card-icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.6rem;
+    }
+    .card h4 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      color: var(--ink);
+    }
+    .card p {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    /* ─── CHECKLIST ─── */
+    .checklist {
+      list-style: none;
+      margin: 1rem 0;
+    }
+    .checklist li {
+      padding: 0.45rem 0;
+      padding-left: 1.8rem;
+      position: relative;
+      font-size: 0.92rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .checklist li:last-child { border: none; }
+    .checklist li::before {
+      content: "□";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 1rem;
+    }
+
+    /* ─── DIVIDER ─── */
+    hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2.5rem 0;
+    }
+
+    /* ─── PRINT ─── */
+    @media print {
+      nav, aside, #progress-bar { display: none; }
+      .page-wrapper { grid-template-columns: 1fr; }
+      main { padding: 2rem; max-width: 100%; }
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .page-wrapper { grid-template-columns: 1fr; }
+      aside { display: none; }
+      main { padding: 2rem 1.5rem; }
+      .hero h1 { font-size: 2.2rem; }
+      nav { padding: 0 1rem; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<nav>
+  <div class="nav-brand">Claude <span>Formation 2026</span></div>
+  <ul class="nav-links">
+    <li><a href="#decouverte">Découverte</a></li>
+    <li><a href="#prompting">Prompting</a></li>
+    <li><a href="#projets">Projets</a></li>
+    <li><a href="#artefacts">Artefacts</a></li>
+    <li><a href="#cowork">Co-work</a></li>
+    <li><a href="#code">Claude Code</a></li>
+  </ul>
+</nav>
+
+<div class="page-wrapper">
+
+  <!-- SIDEBAR -->
+  <aside>
+    <div class="sidebar-section-label">Introduction</div>
+    <a href="#hero" class="sidebar-link">Vue d'ensemble</a>
+    <a href="#tarifs" class="sidebar-link level2">Plans et tarifs</a>
+
+    <div class="sidebar-section-label">Prise en main</div>
+    <a href="#decouverte" class="sidebar-link">Créer son compte</a>
+    <a href="#interface" class="sidebar-link level2">Interface principale</a>
+    <a href="#parametres" class="sidebar-link level2">Paramètres clés</a>
+    <a href="#modeles" class="sidebar-link level2">Choisir son modèle</a>
+    <a href="#modes" class="sidebar-link level2">Modes d'interaction</a>
+
+    <div class="sidebar-section-label">Prompting</div>
+    <a href="#prompting" class="sidebar-link">La méthode GCAO</a>
+    <a href="#styles" class="sidebar-link level2">Styles de rédaction</a>
+
+    <div class="sidebar-section-label">Organiser son travail</div>
+    <a href="#projets" class="sidebar-link">Projets</a>
+    <a href="#memoire" class="sidebar-link level2">Mémoire et contexte</a>
+
+    <div class="sidebar-section-label">Créer</div>
+    <a href="#artefacts" class="sidebar-link">Artefacts</a>
+    <a href="#visualisations" class="sidebar-link level2">Visualisations inline</a>
+
+    <div class="sidebar-section-label">Aller plus loin</div>
+    <a href="#cowork" class="sidebar-link">Claude Co-work</a>
+    <a href="#connecteurs" class="sidebar-link level2">Connecteurs (MCP)</a>
+    <a href="#competences" class="sidebar-link level2">Compétences (Skills)</a>
+    <a href="#code" class="sidebar-link">Claude Code</a>
+    <a href="#deploiement" class="sidebar-link level2">Déploiement Netlify</a>
+    <a href="#mobile" class="sidebar-link level2">Usage sur mobile</a>
+  </aside>
+
+  <!-- MAIN -->
+  <main>
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+      <p class="hero-label">Guide de formation — Claude 2026</p>
+      <h1>Maîtriser<br><em>Claude</em><br>de A à Z</h1>
+      <p class="hero-sub">De la création de compte à Claude Code, ce guide accompagne les participants tout au long de la formation. Chaque section correspond à un module pratique.</p>
+      <div class="hero-meta">
+        <div class="meta-item">
+          <span class="meta-label">Source</span>
+          <span class="meta-value">Tuto YouTube 2026</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Adapté par</span>
+          <span class="meta-value">Etik Conseil & Formation</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Niveau</span>
+          <span class="meta-value">Débutant → Expert</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Plateforme</span>
+          <span class="meta-value">claude.ai</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- SECTION 1 — TARIFS ET CRÉATION DE COMPTE -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="section" id="tarifs">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2>Plans, tarifs et création de compte</h2>
+      </div>
+
+      <p>Claude est accessible sur <strong>claude.ai</strong> avec plusieurs formules. Avant de commencer, il est utile de comprendre ce que chaque plan permet réellement.</p>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Plan</th>
+              <th>Usage</th>
+              <th>Modèles accessibles</th>
+              <th>Remarque</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Gratuit</strong></td>
+              <td>Test et découverte</td>
+              <td>Claude Sonnet 4.6, Haiku</td>
+              <td>Limité en volume — pas pour un usage professionnel soutenu</td>
+            </tr>
+            <tr>
+              <td><strong>Pro</strong></td>
+              <td>Usage individuel régulier</td>
+              <td>Sonnet + Opus 4.6</td>
+              <td>Accès à Claude Code, projets avancés</td>
+            </tr>
+            <tr>
+              <td><strong>Max 5x / 20x</strong></td>
+              <td>Utilisation intensive</td>
+              <td>Tous les modèles</td>
+              <td>Volume multiplié × 5 ou × 20 par rapport au Pro</td>
+            </tr>
+            <tr>
+              <td><strong>Team / Enterprise</strong></td>
+              <td>Équipes et organisations</td>
+              <td>Tous les modèles</td>
+              <td>Projets partagés, mémoire collaborative</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout tip">
+        <p class="callout-title">💡 Conseil formateur</p>
+        <p>Pensez Claude comme un collaborateur supplémentaire. Dans cette optique, le coût mensuel est très faible comparé à une ressource humaine. Commencez par le plan Pro, passez à Max si vous constatez une réelle contrainte de volume.</p>
+      </div>
+
+      <h3 id="decouverte">Créer son compte — pas à pas</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <strong>Accéder à claude.ai</strong>
+            <p>Cliquer sur « Essayer Claude ». Possibilité de s'inscrire par e-mail ou via Google.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <strong>Vérifier son numéro de téléphone</strong>
+            <p>Un code de vérification est envoyé par SMS. Cette étape est obligatoire.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <strong>Choisir son usage</strong>
+            <p>Personnel, avec une équipe, ou professionnel. Ce choix peut être modifié ultérieurement dans les paramètres.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <strong>Désactiver l'entraînement sur vos données</strong>
+            <p>Important : désactiver l'option « Améliorer Claude avec mes conversations ». Cela protège la confidentialité de vos échanges professionnels.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <strong>Personnaliser son profil</strong>
+            <p>Renseigner son rôle, ses centres d'intérêt, ses préférences. Ces informations sont utilisées pour adapter les réponses de Claude.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout warning">
+        <p class="callout-title">⚠️ Confidentialité</p>
+        <p>L'option « Améliorer Claude » est activée par défaut lors de certaines inscriptions. Vérifiez dans <strong>Paramètres → Confidentialité</strong> que cette option est bien désactivée, surtout si vous traitez des données professionnelles sensibles.</p>
+      </div>
+    </section>
+
+    <hr>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- SECTION 2 — INTERFACE ET PARAMÈTRES -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="section" id="interface">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2>Interface et paramètres essentiels</h2>
+      </div>
+
+      <p>L'interface de Claude est organisée en trois zones principales. Prendre le temps de la configurer correctement dès le départ évite de nombreuses frictions par la suite.</p>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">◧</div>
+          <h4>Barre latérale gauche</h4>
+          <p>Historique des conversations, artefacts, projets. Peut être masquée pour plus de concentration.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">◫</div>
+          <h4>Zone de chat centrale</h4>
+          <p>Saisie des messages, sélection du modèle, ajout de fichiers, choix du style de rédaction.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">◨</div>
+          <h4>Panneau artefacts</h4>
+          <p>S'ouvre à droite lorsque Claude génère du code ou un mini-outil. Affiche le rendu visuel ou le code source.</p>
+        </div>
+      </div>
+
+      <h3 id="parametres">Paramètres clés à configurer</h3>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Paramètre</th>
+              <th>Emplacement</th>
+              <th>Recommandation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Préférences personnelles</strong></td>
+              <td>Paramètres → Général</td>
+              <td>Renseigner son rôle, son contexte professionnel — améliore la pertinence de toutes les réponses</td>
+            </tr>
+            <tr>
+              <td><strong>Mémoire</strong></td>
+              <td>Paramètres → Capacités</td>
+              <td>Activer pour que Claude mémorise des informations entre les sessions</td>
+            </tr>
+            <tr>
+              <td><strong>Chargement des outils</strong></td>
+              <td>Paramètres → Capacités</td>
+              <td>Laisser sur « charger au besoin » pour ne pas consommer inutilement des tokens</td>
+            </tr>
+            <tr>
+              <td><strong>Artefacts</strong></td>
+              <td>Paramètres → Visuels</td>
+              <td>Activer. Option « artefacts alimentés par IA » à activer selon les besoins avancés</td>
+            </tr>
+            <tr>
+              <td><strong>Exécution de code</strong></td>
+              <td>Paramètres → Visuels</td>
+              <td>Activer pour exploiter la génération d'outils interactifs</td>
+            </tr>
+            <tr>
+              <td><strong>Confidentialité localisation</strong></td>
+              <td>Paramètres → Confidentialité</td>
+              <td>Selon usage : utile pour les requêtes locales, à désactiver pour la confidentialité maximale</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout info">
+        <p class="callout-title">ℹ️ Statut de la plateforme</p>
+        <p>En cas de dysfonctionnement, consultez <strong>status.anthropic.com</strong> pour vérifier l'état des serveurs en temps réel avant de chercher la cause côté utilisateur.</p>
+      </div>
+
+      <h3 id="modeles">Choisir son modèle</h3>
+      <p>Le sélecteur de modèle est accessible directement dans la zone de chat. Chaque modèle correspond à un compromis vitesse/puissance/coût.</p>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Modèle</th>
+              <th>Caractéristique</th>
+              <th>Cas d'usage typique</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>claude-haiku</code></td>
+              <td>Le plus rapide, le plus léger</td>
+              <td>Réponses courtes, tâches simples, prototypage rapide</td>
+            </tr>
+            <tr>
+              <td><code>claude-sonnet-4.6</code></td>
+              <td>Équilibre optimal vitesse/qualité</td>
+              <td>Usage quotidien général, rédaction, analyse, formation</td>
+            </tr>
+            <tr>
+              <td><code>claude-opus-4.6</code></td>
+              <td>Le plus puissant, plus lent</td>
+              <td>Raisonnement complexe, code avancé, analyse approfondie</td>
+            </tr>
+            <tr>
+              <td><code>Opus 4.6 — 1M tokens</code></td>
+              <td>Fenêtre contexte étendue</td>
+              <td>Analyse de bases de code entières, documents longs</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="modes">Modes d'interaction</h3>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">⌨️</div>
+          <h4>Mode texte standard</h4>
+          <p>Saisie clavier avec support des fichiers, images, CSV. Le mode de base, toujours disponible.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🎤</div>
+          <h4>Mode vocal</h4>
+          <p>Conversation parlée bidirectionnelle. Idéal en déplacement, en voiture, ou pour tester des idées à voix haute.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">👻</div>
+          <h4>Mode incognito</h4>
+          <p>Aucune mémorisation, aucune sauvegarde, aucun entraînement. Pour les échanges sensibles ponctuels.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔍</div>
+          <h4>Recherche web intégrée</h4>
+          <p>Activée par défaut. Permet à Claude d'accéder à des informations récentes pour enrichir ses réponses.</p>
+        </div>
+      </div>
+
+      <div class="callout tip">
+        <p class="callout-title">💡 Raccourci clavier utile</p>
+        <p>Depuis l'application desktop, <strong>double-appui sur Option (Alt)</strong> ouvre une barre de commande rapide accessible depuis n'importe quelle application. Il est possible de faire glisser une capture d'écran directement dans cette barre.</p>
+      </div>
+    </section>
+
+    <hr>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- SECTION 3 — PROMPTING -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="section" id="prompting">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2>L'art du prompting — méthode GCAO</h2>
+      </div>
+
+      <p>La qualité d'une réponse dépend directement de la qualité du prompt. Un prompt générique produit une réponse générique — identique à ce que n'importe qui obtiendrait. La méthode <strong>GCAO</strong> structure chaque demande pour obtenir des résultats spécifiques, actionnables et personnalisés.</p>
+
+      <div class="formula">
+        <span>G</span>oal
+        <span class="arrow">+</span>
+        <span>C</span>ontext
+        <span class="arrow">+</span>
+        <span>A</span>ction
+        <span class="arrow">+</span>
+        <span>O</span>utput
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Composant</th>
+              <th>Définition</th>
+              <th>Exemple concret</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>G — Goal</strong><br><em>(Objectif)</em></td>
+              <td>Quel résultat final visez-vous ? Soyez précis sur l'intention.</td>
+              <td>« Mon objectif est de créer des vidéos YouTube qui performent bien pour ma chaîne. »</td>
+            </tr>
+            <tr>
+              <td><strong>C — Context</strong><br><em>(Contexte)</em></td>
+              <td>Quelles informations Claude doit-il posséder pour comprendre votre situation ? Joignez des fichiers si pertinent.</td>
+              <td>« Les analytics de mes vidéos passées sont joints en pièce jointe. »</td>
+            </tr>
+            <tr>
+              <td><strong>A — Action</strong><br><em>(Action)</em></td>
+              <td>Quelle(s) tâche(s) précise(s) Claude doit-il exécuter ?</td>
+              <td>« Analyse mes statistiques. Ensuite, recherche via web search les tendances de ma niche et propose 3 idées de vidéos. »</td>
+            </tr>
+            <tr>
+              <td><strong>O — Output</strong><br><em>(Format de sortie)</em></td>
+              <td>Comment voulez-vous recevoir le résultat ? Format, longueur, structure.</td>
+              <td>« Présente sous forme de liste, avec titre, durée, cible et une brève justification pour chaque idée. »</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Prompt générique vs. Prompt GCAO — comparaison</h3>
+
+      <div class="code-block">
+        <div class="code-label">❌ Prompt générique</div>
+        <code>Donne-moi des idées pour développer ma chaîne YouTube.</code>
+      </div>
+
+      <div class="code-block">
+        <div class="code-label">✅ Prompt GCAO structuré</div>
+        <code><span class="hl">OBJECTIF :</span> Créer des vidéos YouTube qui performent bien pour ma chaîne.<br>
+<span class="hl">CONTEXTE :</span> Les analytics de mes vidéos passées sont joints en CSV.<br>
+<span class="hl">ACTION :</span> Analyse mes statistiques passées, puis effectue une recherche web<br>sur les tendances actuelles de ma niche. Propose 3 idées de vidéos basées<br>sur ce qui a fonctionné ET sur les tendances du moment.<br>
+<span class="hl">FORMAT :</span> Liste à puces avec, pour chaque idée : titre, durée estimée,<br>cible audience, et une courte justification.</code>
+      </div>
+
+      <div class="callout key">
+        <p class="callout-title">🎯 Règle d'or</p>
+        <p>Le prompt générique reçoit des conseils qui conviendraient à n'importe quelle chaîne YouTube. Le prompt GCAO reçoit des recommandations basées sur vos données réelles, adaptées à votre cas précis. La différence est fondamentale.</p>
+      </div>
+
+      <h3 id="styles">Styles de rédaction personnalisés</h3>
+      <p>Claude peut adopter un style de rédaction spécifique. Depuis la zone de chat, le menu de style permet de choisir parmi les styles prédéfinis (normal, concis, explicatif, formel) ou de créer un style personnalisé en fournissant des exemples de sa propre écriture.</p>
+
+      <div class="callout tip">
+        <p class="callout-title">💡 Créer son style maison</p>
+        <p>Dans « Créer et modifier les styles », il suffit de coller des exemples de textes que vous avez écrits — e-mails, rapports, comptes rendus. Claude analyse votre tonalité et réplique votre style dans ses réponses.</p>
+      </div>
+    </section>
+
+    <hr>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- SECTION 4 — PROJETS -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="section" id="projets">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2>Projets — organiser son travail dans la durée</h2>
+      </div>
+
+      <p>Une conversation classique est idéale pour une question ponctuelle. Mais pour un travail récurrent — développer une stratégie, suivre un projet client, préparer une formation — les <strong>Projets</strong> offrent une mémoire persistante, des fichiers de référence et des instructions permanentes.</p>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">📂</div>
+          <h4>Mémoire silotée</h4>
+          <p>Chaque projet possède sa propre mémoire, indépendante des autres conversations et projets.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">📎</div>
+          <h4>Fichiers en contexte permanent</h4>
+          <p>Joindre des documents (CSV, PDF, notes) qui seront disponibles dans toutes les conversations du projet.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">📋</div>
+          <h4>Instructions persistantes</h4>
+          <p>Rédiger une fois les instructions de comportement — objectif, rôle, contraintes — et les réutiliser à chaque session.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">👥</div>
+          <h4>Collaboration d'équipe</h4>
+          <p>Partager un projet avec d'autres utilisateurs pour travailler collectivement dans le même contexte.</p>
+        </div>
+      </div>
+
+      <h3>Structurer les instructions d'un projet avec GCAO</h3>
+      <p>Les instructions de projet peuvent elles-mêmes être rédigées selon la méthode GCAO, ce qui évite de répéter le contexte à chaque nouvelle conversation.</p>
+
+      <div class="code-block">
+        <div class="code-label">Exemple d'instructions de projet</div>
+        <code><span class="hl">OBJECTIF DU PROJET :</span><br>
+Agir comme consultant RH pour aider à structurer un programme de<br>
+développement managérial pour une organisation de 150 collaborateurs.<br><br>
+<span class="hl">CONTEXTE :</span><br>
+Les fichiers joints contiennent le diagnostic RH initial, les résultats<br>
+de l'enquête d'engagement et les profils des populations cibles.<br><br>
+<span class="hl">ACTION (comportement par défaut) :</span><br>
+Poser les bonnes questions avant de prescrire. Agir en consultant,<br>
+pas en exécutant. Si une demande est vague, demander des précisions.<br><br>
+<span class="hl">FORMAT :</span><br>
+Adapter la longueur des réponses à la longueur des messages reçus.<br>
+Privilégier un ton direct et professionnel. Utiliser des listes<br>
+uniquement lorsque c'est pertinent pour la clarté.</code>
+      </div>
+
+      <h3 id="memoire">Mémoire et contexte entre sessions</h3>
+      <p>En dehors des projets, Claude peut mémoriser des informations générales sur l'utilisateur (rôle, préférences, contexte) entre les conversations. Cette mémoire est gérée dans <strong>Paramètres → Confidentialité → Préférences de mémoire</strong>.</p>
+
+      <div class="callout info">
+        <p class="callout-title">ℹ️ Importer sa mémoire depuis d'autres IA</p>
+        <p>Claude propose un mécanisme d'import des mémoires depuis ChatGPT (et d'autres). Un prompt spécifique est fourni à copier dans l'autre outil ; le résultat est ensuite collé dans Claude pour transférer le contexte accumulé.</p>
+      </div>
+    </section>
+
+    <hr>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- SECTION 5 — ARTEFACTS -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="section" id="artefacts">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2>Artefacts — créer des outils vivants</h2>
+      </div>
+
+      <p>Un artefact est un mini-outil ou un document interactif généré par Claude et exécuté directement dans l'interface. C'est l'une des fonctionnalités les plus distinctives de Claude : il ne se contente pas de décrire un outil, il le construit et le rend opérationnel immédiatement.</p>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">🌐</div>
+          <h4>Sites web et portfolios</h4>
+          <p>Prototypes de sites, landing pages, portfolios. Le code HTML/CSS/JS est généré et rendu en temps réel.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🎮</div>
+          <h4>Mini-applications</h4>
+          <p>Calculateurs, convertisseurs, simulateurs, jeux. Des outils réutilisables créés en quelques minutes.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">📊</div>
+          <h4>Tableaux de bord</h4>
+          <p>Visualisations de données, graphiques, analyses visuelles. À sauvegarder comme artefact pour y revenir.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">📝</div>
+          <h4>Documents structurés</h4>
+          <p>Rapports, présentations, guides. Format plus riche que le simple texte de chat.</p>
+        </div>
+      </div>
+
+      <h3>Créer un artefact depuis zéro</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <strong>Nouveau chat → « Nouvel artefact »</strong>
+            <p>Dans la barre latérale gauche, ou directement depuis le bouton d'artefacts.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <strong>Choisir le type</strong>
+            <p>Application/site web, document, visualisation, outil… Claude guide avec des questions pour préciser le besoin.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <strong>Affiner itérativement</strong>
+            <p>Décrire les modifications souhaitées en langage naturel. Claude modifie le code en préservant ce qui fonctionne déjà.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <strong>Publier et partager</strong>
+            <p>« Publier et copier le lien » génère une URL partageable. Toute personne ayant le lien peut utiliser l'outil.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout tip">
+        <p class="callout-title">💡 Cas d'usage professionnel</p>
+        <p>Besoin d'un outil de conversion de fuseaux horaires avant un appel international ? Demandez à Claude de créer un artefact avec un curseur horaire. Vous l'aurez en deux minutes, utilisable immédiatement, sans télécharger aucune application.</p>
+      </div>
+
+      <h3 id="visualisations">Visualisations inline</h3>
+      <p>Contrairement aux artefacts qui s'ouvrent dans un panneau séparé, les visualisations inline s'intègrent directement dans le fil de la conversation. Elles sont idéales pour explorer des données de façon conversationnelle — poser une question sur ses chiffres et voir un graphique apparaître au fil de l'échange.</p>
+
+      <p>Une visualisation inline peut être sauvegardée en artefact en la survolant et en cliquant sur l'icône de sauvegarde.</p>
+    </section>
+
+    <hr>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- SECTION 6 — CO-WORK -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="section" id="cowork">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2>Claude Co-work — Claude sur votre ordinateur</h2>
+      </div>
+
+      <p>Claude Co-work est disponible via l'application desktop (Mac, Windows). Il donne à Claude un accès à votre système de fichiers, vos applications et votre navigateur — transformant Claude d'un assistant conversationnel en un agent qui agit sur votre machine.</p>
+
+      <div class="callout warning">
+        <p class="callout-title">⚠️ Prérequis</p>
+        <p>Co-work nécessite l'application desktop Claude (à télécharger sur claude.ai) et les autorisations d'accessibilité et d'enregistrement d'écran accordées à l'application dans les paramètres système.</p>
+      </div>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">📁</div>
+          <h4>Gestion de fichiers</h4>
+          <p>Trier, déplacer, renommer, organiser des fichiers entre dossiers selon des règles que vous définissez.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">⏱️</div>
+          <h4>Tâches planifiées</h4>
+          <p>Définir des automatisations récurrentes : nettoyage de bureau quotidien, rapports hebdomadaires, etc.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">📱</div>
+          <h4>Dispatch (mobile)</h4>
+          <p>Piloter Co-work depuis son téléphone pendant que l'ordinateur est au bureau. Déléguer à distance.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🌐</div>
+          <h4>Claude in Chrome</h4>
+          <p>Extension Chrome qui permet à Claude de naviguer, cliquer, capturer des pages web pour vous.</p>
+        </div>
+      </div>
+
+      <h3>Instructions globales Co-work</h3>
+      <p>Dans <strong>Paramètres → Co-work → Instructions globales</strong>, il est possible de définir des préférences et conventions permanentes : comment Claude doit nommer les fichiers, dans quels dossiers déposer quoi, quel format utiliser pour les comptes rendus. Ces instructions s'appliquent à toutes les sessions Co-work.</p>
+
+      <h3 id="connecteurs">Connecteurs (MCP — Model Context Protocol)</h3>
+      <p>Les connecteurs permettent à Claude de lire et d'écrire dans des applications tierces. Le MCP (<em>Model Context Protocol</em>) est le standard technique qui rend cela possible.</p>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Connecteur</th>
+              <th>Ce que Claude peut faire</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Gmail</strong></td>
+              <td>Lire, rédiger, envoyer des e-mails, créer des brouillons</td>
+            </tr>
+            <tr>
+              <td><strong>Google Agenda</strong></td>
+              <td>Lire le planning, créer des événements, préparer des briefs journaliers</td>
+            </tr>
+            <tr>
+              <td><strong>Notion</strong></td>
+              <td>Lire les bases de données, créer des pages, mettre à jour des CRM</td>
+            </tr>
+            <tr>
+              <td><strong>Google Drive</strong></td>
+              <td>Accéder, lire, créer des fichiers dans Drive</td>
+            </tr>
+            <tr>
+              <td><strong>HubSpot</strong></td>
+              <td>Interroger le CRM, enrichir les contacts, créer des tâches</td>
+            </tr>
+            <tr>
+              <td><strong>GitHub</strong></td>
+              <td>Lire/modifier du code, créer des branches, commiter</td>
+            </tr>
+            <tr>
+              <td><strong>Slack</strong></td>
+              <td>Envoyer des messages, lire des canaux, résumer des conversations</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout key">
+        <p class="callout-title">🔑 Cas d'usage combiné</p>
+        <p>Exemple concret : Claude lit un CRM Notion pour identifier les contacts non relancés depuis 60 jours, rédige un e-mail personnalisé pour chacun via Gmail, et crée les brouillons — le tout en une seule instruction. C'est la puissance de la combinaison connecteurs.</p>
+      </div>
+
+      <h3 id="competences">Compétences (Skills)</h3>
+      <p>Une compétence (skill) est un processus automatisé et reproductible que Claude exécute de la même façon à chaque fois. Là où une conversation ordinaire peut donner des résultats variables, une compétence impose un cadre précis : les mêmes étapes, les mêmes outils, le même format de sortie.</p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">A</div>
+          <div class="step-content">
+            <strong>Créer par description</strong>
+            <p>Expliquer à Claude ce qu'on veut automatiser. Il pose des questions et construit le fichier de compétence.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">B</div>
+          <div class="step-content">
+            <strong>Rétro-ingénierie d'un résultat existant</strong>
+            <p>Obtenir un bon résultat en chat classique, puis dire à Claude : « Crée une compétence qui fait exactement ce qu'on vient de faire. »</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">C</div>
+          <div class="step-content">
+            <strong>Importer une compétence tierce</strong>
+            <p>Télécharger un fichier <code>.zip</code> de compétence existant et l'uploader dans Paramètres → Compétences.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout tip">
+        <p class="callout-title">💡 Activer une compétence</p>
+        <p>Dans Co-work, les compétences s'invoquent avec une commande slash. Exemple : taper <code>/cook</code> lance la compétence de génération de recettes. Taper <code>/daily</code> lance le brief journalier depuis l'agenda. Ces commandes sont définies lors de la création de la compétence.</p>
+      </div>
+    </section>
+
+    <hr>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- SECTION 7 — CLAUDE CODE -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="section" id="code">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2>Claude Code — développement assisté par IA</h2>
+      </div>
+
+      <p>Claude Code est l'environnement de développement intégré à Claude. Il permet de créer, modifier, tester et déployer du code directement depuis l'interface Claude, sans basculer entre un éditeur et une interface IA.</p>
+
+      <div class="callout warning">
+        <p class="callout-title">⚠️ Niveau technique requis</p>
+        <p>Cette section implique des concepts de développement (terminal, dépôts Git, variables d'environnement, déploiement). Elle est accessible aux non-développeurs mais nécessite d'être à l'aise avec la logique technique. En cas de blocage, Claude lui-même est le meilleur recours pour demander des explications.</p>
+      </div>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">💻</div>
+          <h4>Interface visuelle</h4>
+          <p>Onglet « Code » dans l'application desktop. Interface graphique avec prévisualisation intégrée.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">⬛</div>
+          <h4>Terminal</h4>
+          <p>Commande <code>claude</code> dans n'importe quel terminal. Plus flexible, préféré des développeurs.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">☁️</div>
+          <h4>Environnement cloud</h4>
+          <p>Anthropic héberge l'exécution sur ses serveurs. Opérationnel depuis n'importe où, y compris depuis un téléphone.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔗</div>
+          <h4>Connexion SSH</h4>
+          <p>Se connecter à un serveur distant et opérer sur une base de code hébergée à distance.</p>
+        </div>
+      </div>
+
+      <h3>Paramètres importants de Claude Code</h3>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Paramètre</th>
+              <th>Valeurs</th>
+              <th>Impact</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Effort</strong></td>
+              <td>Faible / Moyen / Élevé / Maximum</td>
+              <td>Détermine le nombre d'agents et la profondeur d'analyse. Maximum pour les grandes bases de code.</td>
+            </tr>
+            <tr>
+              <td><strong>Permissions</strong></td>
+              <td>Demander / Auto-accepter / Plan / Bypass</td>
+              <td>Niveau d'autonomie accordé à Claude. Recommandé : « demander » pour les opérations sensibles.</td>
+            </tr>
+            <tr>
+              <td><strong>Modèle</strong></td>
+              <td>Opus 4.6 / Opus 4.6 1M / Sonnet</td>
+              <td>Opus 4.6 1M pour les très grandes bases de code nécessitant un contexte étendu.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Le fichier CLAUDE.md</h3>
+      <p>Au sein d'un répertoire de projet, un fichier <code>CLAUDE.md</code> fournit à Claude des instructions permanentes sur ce projet : structure des dossiers, conventions de code, objectifs, contraintes. C'est l'équivalent des instructions de projet, mais pour le code.</p>
+
+      <div class="code-block">
+        <div class="code-label">Exemple de CLAUDE.md</div>
+        <code><span class="hl"># Mon projet personnel</span><br><br>
+<span class="dim">## Structure</span><br>
+Répertoire racine pour tous les sous-projets tutoriels.<br>
+Chaque sous-dossier = un projet distinct.<br><br>
+<span class="dim">## Conventions</span><br>
+- Toujours créer un .gitignore avant le premier commit<br>
+- Nommer les branches : feature/nom-fonctionnalite<br>
+- Ne jamais commiter de clés API ou secrets</code>
+      </div>
+
+      <h3>Commandes utiles en terminal</h3>
+      <ul class="checklist">
+        <li><code>/model</code> — Changer de modèle en cours de session</li>
+        <li><code>/effort</code> — Ajuster le niveau d'effort (low / medium / high)</li>
+        <li><code>/btw votre question</code> — Poser une question latérale sans interrompre la tâche en cours</li>
+        <li><code>/plan</code> — Demander à Claude de rédiger un plan avant d'agir</li>
+        <li><code>/loop</code> — Exécuter une tâche en boucle automatisée (cron)</li>
+        <li><code>/schedule</code> — Programmer une tâche à une heure donnée</li>
+      </ul>
+
+      <h3 id="deploiement">Déploiement avec Netlify</h3>
+      <p>Claude Code intègre un connecteur Netlify qui permet de déployer un site web directement depuis une session de code. Le flux typique est le suivant :</p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <strong>Créer le site localement avec Claude</strong>
+            <p>Générer les fichiers du site dans un répertoire de projet via Claude Code.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <strong>Connecter le connecteur Netlify</strong>
+            <p>Dans Co-work ou Claude Code → Options → Connecteurs → Netlify → Autoriser.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <strong>Déployer</strong>
+            <p>Dire à Claude : « Déploie ce site sur Netlify. » Il exécute la commande et retourne l'URL live.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <strong>Connecter à GitHub pour le déploiement continu</strong>
+            <p>Lier le repository GitHub au projet Netlify. Chaque push sur la branche principale redéploie automatiquement le site.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <strong>Configurer les variables d'environnement</strong>
+            <p>Ajouter les clés API dans Netlify → Configuration du projet → Variables d'environnement. Ces clés ne sont jamais exposées dans le code.</p>
+          </div>
+        </div>
+      </div>
+
+      <h3 id="mobile">Travailler depuis son téléphone</h3>
+      <p>Grâce aux environnements cloud, Claude Code fonctionne depuis n'importe quel appareil connecté à Internet. Le code s'exécute sur les serveurs d'Anthropic, pas sur le téléphone.</p>
+
+      <div class="callout key">
+        <p class="callout-title">🎯 Ce que cela signifie concrètement</p>
+        <p>Depuis votre téléphone, vous pouvez modifier le contenu d'un site web, publier un article de blog, corriger un bug dans votre application, planifier des tâches automatisées. Tout cela en chatant en langage naturel, sans toucher à un éditeur de code.</p>
+      </div>
+    </section>
+
+    <hr>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- RÉCAPITULATIF FORMATION -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="section" id="recap">
+      <div class="section-header">
+        <span class="section-num">◆</span>
+        <h2>Récapitulatif — ce que vous savez faire maintenant</h2>
+      </div>
+
+      <p>À l'issue de cette formation, les participants maîtrisent les éléments suivants :</p>
+
+      <ul class="checklist">
+        <li>Créer et configurer un compte Claude avec les bons paramètres de confidentialité</li>
+        <li>Choisir le modèle adapté à chaque type de tâche</li>
+        <li>Structurer un prompt efficace avec la méthode GCAO</li>
+        <li>Créer et utiliser des projets avec fichiers et instructions persistantes</li>
+        <li>Générer des artefacts interactifs (outils, sites, tableaux de bord)</li>
+        <li>Utiliser Co-work pour automatiser des tâches sur son ordinateur</li>
+        <li>Connecter des applications tierces via les connecteurs MCP</li>
+        <li>Créer des compétences (skills) pour des processus reproductibles</li>
+        <li>Utiliser Claude Code pour développer et déployer des projets web</li>
+        <li>Opérer Claude depuis son téléphone via les environnements cloud</li>
+      </ul>
+
+      <div class="callout tip">
+        <p class="callout-title">💡 Prochaine étape recommandée</p>
+        <p>Identifiez dans votre activité professionnelle une tâche répétitive que vous faites au moins 2 fois par semaine. Créez un projet Claude ou une compétence dédiée à cette tâche. C'est le chemin le plus court vers un gain de temps concret et mesurable.</p>
+      </div>
+
+      <div class="tags">
+        <span class="tag">claude.ai</span>
+        <span class="tag">GCAO</span>
+        <span class="tag">Projets</span>
+        <span class="tag">Artefacts</span>
+        <span class="tag">Co-work</span>
+        <span class="tag">MCP</span>
+        <span class="tag">Skills</span>
+        <span class="tag">Claude Code</span>
+        <span class="tag">Netlify</span>
+        <span class="tag accent">Formation 2026</span>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const el = document.documentElement;
+    const scrolled = el.scrollTop / (el.scrollHeight - el.clientHeight);
+    document.getElementById('progress-bar').style.width = (scrolled * 100) + '%';
+  });
+
+  // Active sidebar link
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.sidebar-link');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.sidebar-link[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
